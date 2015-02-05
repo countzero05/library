@@ -1,0 +1,38 @@
+{% extends app.request.isXmlHttpRequest ? 'AppBundle::ajax.html.twig' : 'AppBundle::layout.html.twig' %}
+
+{% block keywords %}
+  {{ [parent(), 'Авторы', book.author.name, book.name, book.booksCategories.first.name]|join(', ') }}
+{% endblock %}
+
+{% block title %}
+  {{ ['Библиотека художественной литературы', 'Авторы', book.author.name, book.name]|join(' - ') }}
+{% endblock %}
+
+  {% block breadcrumbs %}
+    {% include 'AppBundle:Template:breadcrumb.html.twig' with {links: {
+    'Библиотека': '/',
+    'Авторы': path('author'),
+    ('Авторы на ' ~ book.author.name|slice(0,1)|capitalize ) : path('author_letter', {letter: book.author.name|slice(0,1)|capitalize}),
+    (book.author.name):path('author_name', {slug: book.author.slug}),
+    (book.name): ''
+    }} %}
+  {% endblock breadcrumbs %}
+
+{% block content %}
+  <div>
+    <h6>Автор: <a href="{{ path('author_name', {slug: book.author.name}) }}">{{ book.author.name }}</a>
+    </h6>
+    <h6>Категория: <a
+          href="{{ path('category_name', {slug: book.booksCategories.first.slug}) }}">{{ book.booksCategories.first.name }}</a>
+    </h6>
+
+    <h1>{{ book.author.name }} - {{ book.name }}</h1>
+  </div>
+  <menu id="center-menu" class="row">
+    <div id="book-content"
+         class="btn-group-vertical col-lg-7 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-10 col-sm-offset-1 col-xs-12">
+      <pre>{{ content }}</pre>
+    </div>
+  </menu>
+
+{% endblock %}

@@ -1,0 +1,54 @@
+{% extends app.request.isXmlHttpRequest ? 'AppBundle::ajax.html.twig' : 'AppBundle::layout.html.twig' %}
+
+{% block keywords %}
+  {% if category.parent %}
+    {{ [parent(), 'Категории',category.parent.name, category.name]|join(', ') }}
+  {% else %}
+    {{ [parent(), 'Категории',category.name]|join(', ') }}
+  {% endif %}
+{% endblock %}
+
+{% block title %}
+  {% if category.parent %}
+    {{ ['Библиотека художественной литературы', 'Категории', category.parent.name, category.name]|join(' - ') }}
+  {% else %}
+    {{ ['Библиотека художественной литературы', 'Категории', category.name]|join(' - ') }}
+  {% endif %}
+{% endblock %}
+
+  {% block breadcrumbs %}
+    {% if category.parent %}
+      {% include 'AppBundle:Template:breadcrumb.html.twig' with {links: {
+      'Библиотека': '/',
+      'Категории' : path('category'),
+      (category.parent.name): path('category_name', {slug: category.parent.slug}),
+      (category.name): ''
+      }} %}
+    {% else %}
+      {% include 'AppBundle:Template:breadcrumb.html.twig' with {links: {
+      'Библиотека': '/',
+      'Категории' : path('category'),
+      (category.name): ''
+      }} %}
+    {% endif %}
+  {% endblock breadcrumbs %}
+
+{% block content %}
+  <menu id="center-menu" class="row">
+    {% if category.categories.count > 0 %}
+      <div class="btn-group-vertical col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-2">
+        {% for sub_category in category.categories %}
+          <a href="{{ path('category_name', {slug: sub_category.slug}) }}"
+             class="btn btn-default">{{ sub_category.name }}</a>
+        {% endfor %}
+      </div>
+    {% else %}
+      {% for author in category.authors %}
+        <div class="btn-group-vertical col-lg-4 col-md-6 col-sm-6 col-xs-12">
+          <a href="{{ path('author_name', {slug: author.slug}) }}"
+             class="btn btn-default">{{ author.name }}</a>
+        </div>
+      {% endfor %}
+    {% endif %}
+  </menu>
+{% endblock %}

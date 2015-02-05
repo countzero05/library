@@ -1,0 +1,33 @@
+{% extends app.request.isXmlHttpRequest ? 'AppBundle::ajax.html.twig' : 'AppBundle::layout.html.twig' %}
+
+{% block keywords %}
+  {{ [parent(), 'Авторы']|join(', ') }}
+{% endblock %}
+
+{% block title %}
+  {{ ['Библиотека художественной литературы', 'Авторы']|join(' - ') }}
+{% endblock %}
+
+  {% block breadcrumbs %}
+    {% include 'AppBundle:Template:breadcrumb.html.twig' with {links: {
+    'Библиотека': '/',
+    'Авторы': path('author'),
+    ('Авторы на ' ~ app.request.attributes.get('letter', 'А') ) : ''
+    }} %}
+  {% endblock breadcrumbs %}
+
+{% block content %}
+  {{ author_letter_pagination(app.request.attributes.get('letter', 'А'), allLetters)|raw }}
+
+  <menu id="center-menu" class="row">
+    {% for author in authors %}
+      <div class="btn-group-vertical col-lg-4 col-md-6 col-sm-6 col-xs-12">
+        <a href="{{ path('author_name', {slug: author.slug}) }}"
+           class="btn btn-default">{{ author.name }}</a>
+      </div>
+    {% endfor %}
+  </menu>
+
+  {{ author_letter_pagination(app.request.attributes.get('letter', 'А'), allLetters)|raw }}
+
+{% endblock %}

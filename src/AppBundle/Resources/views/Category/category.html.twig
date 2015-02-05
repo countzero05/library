@@ -1,0 +1,28 @@
+{% extends app.request.isXmlHttpRequest ? 'AppBundle::ajax.html.twig' : 'AppBundle::layout.html.twig' %}
+
+{% block keywords %}
+  {{ [parent(), 'Категории']|join(', ') }}
+{% endblock %}
+
+{% block title %}
+  {{ ['Библиотека художественной литературы', 'Категории']|join(' - ') }}
+{% endblock %}
+
+  {% block breadcrumbs %}
+    {% include 'AppBundle:Template:breadcrumb.html.twig' with {links: {
+    'Библиотека': '/',
+    ('Категории') : ''
+    }} %}
+  {% endblock breadcrumbs %}
+
+
+{% block content %}
+  <menu id="center-menu" class="row">
+    <div class="btn-group-vertical col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-2 col-xs-10 col-xs-offset-0">
+      {% for category in categories %}
+        <a href="{{ path('category_name', {slug: category.slug}) }}"
+           class="btn btn-default">{{ category.name }}</a>
+      {% endfor %}
+    </div>
+  </menu>
+{% endblock %}

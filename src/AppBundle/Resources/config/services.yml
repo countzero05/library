@@ -1,0 +1,12 @@
+services:
+    app.twig.menu_extension:
+        class: AppBundle\Twig\Extension\Menu
+        arguments:  [@service_container]
+        tags:
+            - { name: twig.extension }
+
+    app.twig.pagination_extension:
+        class: AppBundle\Twig\Extension\Pagination
+        arguments:  [@service_container]
+        tags:
+            - { name: 'twig.extension' }

@@ -1,6 +1,7 @@
 # Cache and logs (Symfony2)
 /app/cache/*
 /app/logs/*
+/app/Resources/_Utf8
 !app/cache/.gitkeep
 !app/logs/.gitkeep
 
@@ -32,3 +33,4 @@
 
 # Composer PHAR
 /composer.phar
+.idea

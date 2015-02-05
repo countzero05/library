@@ -1,0 +1,16 @@
+{% extends app.request.isXmlHttpRequest ? 'AppBundle::ajax.html.twig' : 'AppBundle::layout.html.twig' %}
+
+{% block title %}
+  {{ ['Библиотека художественной литературы']|join(' - ')  }}
+{% endblock %}
+
+{% block content %}
+  <menu id="center-menu" class="row">
+    <div class="btn-group-vertical col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-2">
+      {% for category in categories %}
+        <a href="{{ path('category', {'slug': category.slug}) }}"
+           class="btn btn-default">{{ category.name }}</a>
+      {% endfor %}
+    </div>
+  </menu>
+{% endblock %}

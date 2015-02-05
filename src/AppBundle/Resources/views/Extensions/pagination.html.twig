@@ -1,0 +1,19 @@
+<div style="text-align: center">
+  <ul class="pagination">
+    {% if prev is not null %}
+      <li><a href="{{ path(app.request.get('_route'), {page: prev}) }}" aria-label="Previous"><span
+              aria-hidden="true">«</span></a></li>
+    {% endif %}
+    {% for i in pages %}
+      {% if i == page %}
+        <li class="active"><a href="{{ path(app.request.get('_route'), {page: i}) }}">{{ i }}</a></li>
+      {% else %}
+        <li><a href="{{ path(app.request.get('_route'), {page: i}) }}">{{ i }}</a></li>
+      {% endif %}
+    {% endfor %}
+    {% if next is not null %}
+      <li><a href="{{ path(app.request.get('_route'), {page: next}) }}" aria-label="Next"><span
+              aria-hidden="true">»</span></a></li>
+    {% endif %}
+  </ul>
+</div>

@@ -30,6 +30,7 @@ class CategoryController extends DefaultController
         $categories = $this->getCategoryRepository()
             ->createQueryBuilder('c')
             ->where('c.parent is null')
+            ->orderBy('c.name', 'ASC')
             ->getQuery()
             ->useResultCache(true, 3600)
             ->getResult();
@@ -53,6 +54,7 @@ class CategoryController extends DefaultController
             ->leftJoin('c.books', 'b')
             ->leftJoin('b.author', 'a')
             ->where('c.slug = :slug')
+            ->orderBy('c.name', 'ASC')
             ->setParameters(['slug' => $slug])
             ->getQuery()
             ->useResultCache(true, 3600)

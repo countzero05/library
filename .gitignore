@@ -24,8 +24,10 @@
 /vendor/
 
 # Assets and user uploads
+/web/compiled
 /web/bundles/
 /web/uploads/
+!web/compiled/.gitkeep
 
 # PHPUnit
 /app/phpunit.xml

@@ -18,11 +18,12 @@
 
 {% block content %}
   <menu id="center-menu" class="row">
-    <div class="btn-group-vertical col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-2 col-xs-10 col-xs-offset-0">
       {% for category in categories %}
-        <a href="{{ path('category_name', {slug: category.slug}) }}"
-           class="btn btn-default">{{ category.name }}</a>
+        <div
+            class="btn-group-vertical col-lg-6 col-lg-offset-0 col-md-6 col-md-offset-0 col-sm-10 col-sm-offset-1 col-xs-12">
+          <a href="{{ path('category_name', {slug: category.slug}) }}"
+             class="btn btn-default">{{ category.name }}</a>
+        </div>
       {% endfor %}
-    </div>
   </menu>
 {% endblock %}

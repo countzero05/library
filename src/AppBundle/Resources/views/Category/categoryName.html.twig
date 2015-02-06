@@ -36,12 +36,13 @@
 {% block content %}
   <menu id="center-menu" class="row">
     {% if category.categories.count > 0 %}
-      <div class="btn-group-vertical col-lg-8 col-lg-offset-2 col-md-8 col-md-offset-2 col-sm-8 col-sm-offset-2">
         {% for sub_category in category.categories %}
-          <a href="{{ path('category_name', {slug: sub_category.slug}) }}"
-             class="btn btn-default">{{ sub_category.name }}</a>
+          <div
+              class="btn-group-vertical col-lg-6 col-lg-offset-0 col-md-6 col-md-offset-0 col-sm-10 col-sm-offset-1 col-xs-12">
+            <a href="{{ path('category_name', {slug: sub_category.slug}) }}"
+               class="btn btn-default">{{ sub_category.name }}</a>
+          </div>
         {% endfor %}
-      </div>
     {% else %}
       {% for author in category.authors %}
         <div class="btn-group-vertical col-lg-4 col-md-6 col-sm-6 col-xs-12">

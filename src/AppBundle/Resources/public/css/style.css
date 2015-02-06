@@ -14,8 +14,13 @@ a {
     float: none;
 }
 
-#content {
-    min-width: 620px;
+#book-content pre {
+    display: inline-block;
+    padding: 20px;
+}
+
+.container {
+    min-width: 650px;
 }
 
 .btn em {
@@ -35,6 +40,22 @@ body {
 
 header {
     text-align: center;
+    font-size: 36px;
+}
+
+@media (max-width: 800px) {
+    header {
+        font-size: 30px;
+    }
+    h1 {
+        font-size: 20px;
+    }
+    hr {
+        display: none;
+    }
+    .breadcrumb {
+        margin-bottom: 3px;
+    }
 }
 
 hr {
@@ -49,11 +70,14 @@ hr {
     font-size: 11px;
 }
 
-header {
-    font-size: 36px;
-}
-
 h1 {
     font-size: 25px;
     text-align: center;
+}
+
+.container .navbar {
+    float: none;
+    box-shadow: none;
+    -webkit-box-shadow: none;
+    margin-bottom: inherit;
 }

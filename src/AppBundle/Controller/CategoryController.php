@@ -55,6 +55,7 @@ class CategoryController extends DefaultController
             ->leftJoin('b.author', 'a')
             ->where('c.slug = :slug')
             ->orderBy('c.name', 'ASC')
+            ->addOrderBy('a.name', 'ASC')
             ->setParameters(['slug' => $slug])
             ->getQuery()
             ->useResultCache(true, 3600)

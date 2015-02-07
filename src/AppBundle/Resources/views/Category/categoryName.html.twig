@@ -44,14 +44,14 @@
           </div>
         {% endfor %}
     {% else %}
-      {{ pagination(app.request.query.getInt('page', 1), authorsCount, 60, 8, {slug: app.request.attributes.get('slug')})|raw }}
+      {{ pagination(app.request.query.getInt('page', 1), authorsCount, 60, 7, {slug: app.request.attributes.get('slug')})|raw }}
       {% for author in authors %}
         <div class="btn-group-vertical col-lg-4 col-md-6 col-sm-6 col-xs-12">
           <a href="{{ path('author_name', {slug: author.slug}) }}"
              class="btn btn-default">{{ author.name }}</a>
         </div>
       {% endfor %}
-      {{ pagination(app.request.query.getInt('page', 1), authorsCount, 60, 8, {slug: app.request.attributes.get('slug')})|raw }}
+      {{ pagination(app.request.query.getInt('page', 1), authorsCount, 60, 7, {slug: app.request.attributes.get('slug')})|raw }}
     {% endif %}
   </menu>
 {% endblock %}

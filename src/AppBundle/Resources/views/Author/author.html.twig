@@ -18,7 +18,7 @@
 
 {% block content %}
   {{ author_letter_pagination(app.request.attributes.get('letter', 'А'), allLetters)|raw }}
-  {{ author_pagination(app.request.query.getInt('page', 1), authorsCount, 60, 8)|raw }}
+  {{ author_pagination(app.request.query.getInt('page', 1), authorsCount, 60, 7)|raw }}
 
   <menu id="center-menu" class="row">
     {% for author in authors %}
@@ -29,7 +29,7 @@
     {% endfor %}
   </menu>
 
-  {{ author_pagination(app.request.query.getInt('page', 1), authorsCount, 60, 8)|raw }}
+  {{ author_pagination(app.request.query.getInt('page', 1), authorsCount, 60, 7)|raw }}
   {{ author_letter_pagination(app.request.attributes.get('letter', 'А'), allLetters)|raw }}
 
 {% endblock %}

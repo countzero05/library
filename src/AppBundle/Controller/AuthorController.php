@@ -12,6 +12,7 @@ namespace AppBundle\Controller;
 use AppBundle\Controller\DefaultController;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -19,6 +20,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * Author controller.
  *
+ * @Cache(expires="+1 minute", public="true", smaxage="60")
  * @Route("/author")
  */
 class AuthorController extends DefaultController
@@ -40,7 +42,7 @@ class AuthorController extends DefaultController
             ->getResult();
 
         $allLetters = array();
-        foreach (range(chr(0xC0),chr(0xDF)) as $v) {
+        foreach (range(chr(0xC0), chr(0xDF)) as $v) {
             $l = iconv('CP1251', 'UTF-8', $v);
             if (in_array($l, ['Ы', 'Ъ', 'Ь']))
                 continue;

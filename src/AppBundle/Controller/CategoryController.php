@@ -11,12 +11,14 @@ namespace AppBundle\Controller;
 
 use AppBundle\Controller\DefaultController;
 use AppBundle\Entity\Category;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Category controller.
  *
+ * @Cache(expires="+1 minute", public="true", smaxage="60")
  * @Route("/category")
  */
 class CategoryController extends DefaultController

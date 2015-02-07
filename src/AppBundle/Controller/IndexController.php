@@ -9,15 +9,19 @@
 namespace AppBundle\Controller;
 
 
+use Doctrine\ORM\Query;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
  * Index controller.
  *
+ * @Cache(expires="+1 minute", public="true", smaxage="60")
  * @Route("/")
  */
-class IndexController extends DefaultController {
+class IndexController extends DefaultController
+{
     /**
      * @Route("/", name="homepage")
      * @Template()

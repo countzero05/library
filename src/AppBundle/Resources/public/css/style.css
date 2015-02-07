@@ -8,6 +8,7 @@ a {
 
 .breadcrumb {
     white-space: nowrap;
+    overflow-x: hidden;
 }
 
 #book-content {
@@ -20,7 +21,7 @@ a {
 }
 
 .container {
-    min-width: 650px;
+    min-width: 615px;
 }
 
 .btn em {
@@ -80,4 +81,8 @@ h1 {
     box-shadow: none;
     -webkit-box-shadow: none;
     margin-bottom: inherit;
+}
+
+#center-menu {
+    -webkit-padding-start: 5px;
 }

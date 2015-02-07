@@ -1,4 +1,4 @@
-<div style="text-align: center">
+<div class="pagination-div">
   <ul class="pagination">
     {% if prev is not null %}
       <li><a href="{{ path('author_letter', {page: prev, letter: app.request.attributes.get('letter', 'А')}) }}" aria-label="Previous"><span

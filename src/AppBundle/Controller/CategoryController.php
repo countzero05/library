@@ -13,6 +13,7 @@ use AppBundle\Controller\DefaultController;
 use AppBundle\Entity\Category;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -27,7 +28,7 @@ class CategoryController extends DefaultController
      * @Route("/", name="category")
      * @Template()
      */
-    public function categoryAction()
+    public function categoryAction(Request $request)
     {
         $categories = $this->getCategoryRepository()
             ->createQueryBuilder('c')
@@ -46,7 +47,7 @@ class CategoryController extends DefaultController
      * @Route("/{slug}", name="category_name")
      * @Template()
      */
-    public function categoryNameAction($slug)
+    public function categoryNameAction(Request $request, $slug)
     {
         /** @var Category $category */
         $category = $this->getCategoryRepository()
@@ -63,8 +64,44 @@ class CategoryController extends DefaultController
             ->useResultCache(true, 3600)
             ->getOneOrNullResult();
 
+        $authors = null;
+        $authorsCount = null;
+
+        if ($category) {
+            $authors = $this->getAuthorRepository()
+                ->createQueryBuilder('a')
+                ->distinct('a.id')
+                ->leftJoin('a.books', 'b')
+                ->leftJoin('b.books_categories', 'c')
+                ->where('c.id = :category')
+                ->orderBy('a.name', 'ASC')
+                ->setFirstResult(60 * ($request->query->getInt('page', 1) - 1))
+                ->setMaxResults(60)
+                ->setParameters(['category' => $category->getId()])
+                ->getQuery()
+                //->useResultCache(true, 3600)
+                ->getResult();
+
+            $qb = $this->getAuthorRepository()
+                ->createQueryBuilder('a');
+
+            $authorsCount = $this->getAuthorRepository()
+                ->createQueryBuilder('a')
+                ->select($qb->expr()->countDistinct('a'))
+                ->leftJoin('a.books', 'b')
+                ->leftJoin('b.books_categories', 'c')
+                ->where('c.id = :category')
+                ->setParameters(['category' => $category->getId()])
+                ->getQuery()
+                //->useResultCache(true, 3600)
+                ->getSingleScalarResult();
+        }
+
+
         return [
-            'category' => $category
+            'category' => $category,
+            'authors' => $authors,
+            'authorsCount' => $authorsCount
         ];
     }
 

@@ -34,7 +34,7 @@ class Pagination extends \Twig_Extension
         );
     }
 
-    public function pagination($page, $rowCount, $rowsPerPage = 20, $pagesPerPagination = 10)
+    public function pagination($page, $rowCount, $rowsPerPage = 60, $pagesPerPagination = 11, $extra)
     {
         $half = ceil(($pagesPerPagination - 1) / 2);
 
@@ -75,11 +75,12 @@ class Pagination extends \Twig_Extension
             'pages' => $pages,
             'pageCount' => $pageCount,
             'prev' => $prev,
-            'next' => $next
+            'next' => $next,
+            'extra' => $extra
         ]);
     }
 
-    public function authorPagination($page, $rowCount, $rowsPerPage = 20, $pagesPerPagination = 10)
+    public function authorPagination($page, $rowCount, $rowsPerPage = 60, $pagesPerPagination = 11)
     {
         $half = ceil(($pagesPerPagination - 1) / 2);
 

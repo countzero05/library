@@ -1,18 +1,18 @@
-<div style="text-align: center">
+<div class="pagination-div">
   <ul class="pagination author-pagination">
     {% if prev is not null %}
-      <li><a href="{{ path('author_letter', {letter: prev, page: app.request.query.getInt('page', 1)}) }}" aria-label="Previous"><span
+      <li><a href="{{ path('author_letter', {letter: prev}) }}" aria-label="Previous"><span
               aria-hidden="true">«</span></a></li>
     {% endif %}
     {% for i in pages %}
       {% if i == page %}
-        <li class="active"><a href="{{ path('author_letter', {letter: i, page: app.request.query.getInt('page', 1)}) }}">{{ i }}</a></li>
+        <li class="active"><a href="{{ path('author_letter', {letter: i}) }}">{{ i }}</a></li>
       {% else %}
-        <li><a href="{{ path('author_letter', {letter: i, page: app.request.query.getInt('page', 1)}) }}">{{ i }}</a></li>
+        <li><a href="{{ path('author_letter', {letter: i}) }}">{{ i }}</a></li>
       {% endif %}
     {% endfor %}
     {% if next is not null %}
-      <li><a href="{{ path('author_letter', {letter: next, page: app.request.query.getInt('page', 1)}) }}" aria-label="Next"><span
+      <li><a href="{{ path('author_letter', {letter: next}) }}" aria-label="Next"><span
               aria-hidden="true">»</span></a></li>
     {% endif %}
   </ul>

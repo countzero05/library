@@ -16,7 +16,7 @@
   </head>
 
   <body>
-  <div class="container">
+  <div class="container {% block container_class %}container-small{% endblock %}">
     <header>Библиотека художественной литературы</header>
     <hr/>
     {#
@@ -29,7 +29,7 @@
         </div>
       </div>
     #}
-    <div class="container-fluid" style="text-align: center;">
+    <div class="container-fluid">
       <!-- Collect the nav links, forms, and other content for toggling -->
       <div class="navbar">
         <a href="{{ path('author') }}" class="btn btn-default navbar-btn">Авторы</a>

@@ -36,10 +36,21 @@ class AuthorController extends DefaultController
             ->createQueryBuilder('a')
             ->orderBy('a.name', 'ASC')
             ->where('a.name like :letter')
+            ->setMaxResults(60)
+            ->setFirstResult(60 * ($request->query->getInt('page', 1) - 1))
             ->getQuery()
             ->setParameters(['letter' => $letter . '%'])
             ->useResultCache(true, 3600)
             ->getResult();
+
+        $authorsCount = $this->getAuthorRepository()
+            ->createQueryBuilder('a')
+            ->select('count(a)')
+            ->where('a.name like :letter')
+            ->getQuery()
+            ->setParameters(['letter' => $letter . '%'])
+            ->useResultCache(true, 3600)
+            ->getSingleScalarResult();
 
         $allLetters = array();
         foreach (range(chr(0xC0), chr(0xDF)) as $v) {
@@ -51,7 +62,8 @@ class AuthorController extends DefaultController
 
         return [
             'authors' => $authors,
-            'allLetters' => $allLetters
+            'allLetters' => $allLetters,
+            'authorsCount' => $authorsCount
         ];
     }
 

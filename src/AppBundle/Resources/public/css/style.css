@@ -1,4 +1,4 @@
-#content .author-pagination > li > a {
+#content .pagination-div li > a {
     padding: 4px 11px;
 }
 
@@ -20,8 +20,16 @@ a {
     padding: 20px;
 }
 
-.container {
+.container-text {
     min-width: 615px;
+}
+
+.container-fluid, .pagination-div {
+    text-align: center;
+}
+
+.pagination {
+    margin: inherit;
 }
 
 .btn em {
@@ -55,7 +63,7 @@ header {
         display: none;
     }
     .breadcrumb {
-        margin-bottom: 3px;
+        margin-bottom: 0;
     }
 }
 

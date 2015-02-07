@@ -1,18 +1,18 @@
-<div style="text-align: center">
+<div class="pagination-div">
   <ul class="pagination">
     {% if prev is not null %}
-      <li><a href="{{ path(app.request.get('_route'), {page: prev}) }}" aria-label="Previous"><span
+      <li><a href="{{ path(app.request.get('_route'), {page: prev}|merge(extra)) }}" aria-label="Previous"><span
               aria-hidden="true">«</span></a></li>
     {% endif %}
     {% for i in pages %}
       {% if i == page %}
-        <li class="active"><a href="{{ path(app.request.get('_route'), {page: i}) }}">{{ i }}</a></li>
+        <li class="active"><a href="{{ path(app.request.get('_route'), {page: i}|merge(extra)) }}">{{ i }}</a></li>
       {% else %}
-        <li><a href="{{ path(app.request.get('_route'), {page: i}) }}">{{ i }}</a></li>
+        <li><a href="{{ path(app.request.get('_route'), {page: i}|merge(extra)) }}">{{ i }}</a></li>
       {% endif %}
     {% endfor %}
     {% if next is not null %}
-      <li><a href="{{ path(app.request.get('_route'), {page: next}) }}" aria-label="Next"><span
+      <li><a href="{{ path(app.request.get('_route'), {page: next}|merge(extra)) }}" aria-label="Next"><span
               aria-hidden="true">»</span></a></li>
     {% endif %}
   </ul>

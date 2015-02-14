@@ -23,12 +23,14 @@
   <div class="container {% block container_class %}container-small{% endblock %}">
     <header>Библиотека художественной литературы</header>
     <hr/>
-    <form action="{{ path('search') }}" method="get" class="col-lg-6 col-md-6 col-sm-6" id="search-str">
-      <div class="input-group">
+    <form action="{{ path('search') }}" method="get" class="col-lg-6 col-md-8 col-sm-8 col-xs-12" id="search-str">
+      <div class="input-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
         <input type="text" name="q" class="form-control" placeholder="Поиск по автору или названию произведения"/>
+{#
                     <span class="input-group-btn">
                         <button class="btn btn-default" type="button">Искать!</button>
                     </span>
+#}
       </div>
     </form>
     <br/>

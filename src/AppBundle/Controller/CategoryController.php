@@ -11,6 +11,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Controller\DefaultController;
 use AppBundle\Entity\Category;
+use Doctrine\ORM\Query;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
@@ -52,13 +53,8 @@ class CategoryController extends DefaultController
         /** @var Category $category */
         $category = $this->getCategoryRepository()
             ->createQueryBuilder('c')
-            ->addSelect('b')
-            ->addSelect('a')
-            ->leftJoin('c.books', 'b')
-            ->leftJoin('b.author', 'a')
             ->where('c.slug = :slug')
             ->orderBy('c.name', 'ASC')
-            ->addOrderBy('a.name', 'ASC')
             ->setParameters(['slug' => $slug])
             ->getQuery()
             ->useResultCache(true, 3600)

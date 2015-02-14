@@ -98,3 +98,7 @@ h1 {
 .select2-results .select2-result-label {
     white-space: nowrap;
 }
+
+.select2-chosen {
+    white-space: nowrap;
+}

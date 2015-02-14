@@ -94,3 +94,7 @@ h1 {
 #center-menu {
     -webkit-padding-start: 5px;
 }
+
+.select2-results .select2-result-label {
+    white-space: nowrap;
+}

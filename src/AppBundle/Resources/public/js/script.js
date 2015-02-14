@@ -1,8 +1,7 @@
 $(document).ready(function () {
   var searchStr = $('#search-str');
   searchStr.find('input[name=q]').select2({
-    //placeholder: "Select a State",
-    //allowClear: true,
+    allowClear: true,
     minimumInputLength: 2,
     ajax: { // instead of writing the function to execute the request we use Select2's convenient helper
       url: searchStr.attr('action'),

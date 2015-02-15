@@ -11,8 +11,14 @@ namespace AppBundle\Controller;
 
 use AppBundle\Controller\DefaultController;
 use AppBundle\Entity\Book;
+use AppBundle\Entity\BookPage;
+use Doctrine\ORM\EntityManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Component\Debug\Exception\FatalErrorException;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -24,26 +30,92 @@ use Symfony\Component\Routing\Annotation\Route;
 class BookController extends DefaultController
 {
     /**
-     * @Route("/{slug}", name="book")
+     * @Route("/{slug}", name="book", defaults={"page" = 1})
+     * @Route("/{slug}/page/{page}", name="book_page", defaults={"page" = 1}, requirements={"page": "\d+"})
      * @Template()
      */
-    public function bookAction($slug)
+    public function bookAction(Request $request, $slug, $page)
     {
+        $request->attributes->set('_route', 'book_page');
+
         /** @var Book $book */
         $book = $this->getBookRepository()
             ->createQueryBuilder('b')
             ->where('b.slug = :slug')
             ->setParameters(['slug' => $slug])
             ->getQuery()
-            ->useResultCache(true, 3600)
+            //->useResultCache(true, 3600)
             ->getOneOrNullResult();
 
-        $content = file_get_contents($this->get('service_container')->getParameter('kernel.root_dir') . '/Resources/_Utf8/' . $book->getFilename());
+        if ($book->getPageCount() === null) {
+            $filePath = $this->get('service_container')->getParameter('kernel.root_dir') . '/Resources/_Utf8/' . $book->getFilename();
+
+            $em = $this->get('doctrine.orm.entity_manager');
+
+            $em->transactional(function (EntityManager $em) use ($filePath, $book) {
+                $page = 0;
+
+                foreach ($this->readData($filePath) as $arr) {
+                    $bookPage = new BookPage();
+
+                    $bookPage->setBook($book);
+                    $bookPage->setContent(implode("", $arr));
+                    $bookPage->setPage(++$page);
+
+                    $em->persist($bookPage);
+                }
+
+                $book->setPageCount($page);
+
+                $em->persist($book);
+            });
+
+            $em->refresh($book);
+        }
+
+        if ($page > $book->getPageCount() || $page < 1) {
+            throw new NotFoundHttpException('Book page not found');
+        }
+
+        /** @var BookPage $bookPage */
+        $bookPage = $this->getBookPageRepository()->findOneBy([
+            'book' => $book->getId(),
+            'page' => $page
+        ]);
 
         return [
             'book' => $book,
-            'content' => $content
+            'bookPage' => $bookPage
         ];
+    }
+
+    /**
+     * @param $filePath
+     * @return \Generator
+     */
+    protected function readData($filePath)
+    {
+        $h = fopen($filePath, 'r');
+
+        $arr = [];
+        $i = 0;
+
+        if ($h !== FALSE) {
+            while (($s = fgets($h)) !== FALSE) {
+                $arr[] = $s;
+                if (++$i == 40) {
+                    yield $arr;
+                    $arr = [];
+                    $i = 0;
+                }
+            }
+
+            yield $arr;
+
+            fclose($h);
+        } else {
+            throw new FileException('Cannot read file ' . $filePath);
+        }
     }
 
 }

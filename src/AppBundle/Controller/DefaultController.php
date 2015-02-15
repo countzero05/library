@@ -31,4 +31,12 @@ class DefaultController extends Controller
         return $this->get('doctrine')->getRepository('AppBundle:Book');
     }
 
+    /**
+     * @return \AppBundle\Entity\BookPageRepository
+     */
+    protected function getBookPageRepository()
+    {
+        return $this->get('doctrine')->getRepository('AppBundle:BookPage');
+    }
+
 }

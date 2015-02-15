@@ -59,6 +59,22 @@ class Book
      **/
     private $books_categories;
 
+
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="BookPage", mappedBy="book")
+     * @ORM\OrderBy({"page" = "ASC"})
+     */
+    private $books_pages;
+
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="page_count", type="integer", nullable=true)
+     */
+    private $page_count;
+
     /**
      * @var \DateTime $created
      *
@@ -76,6 +92,7 @@ class Book
     public function __construct()
     {
         $this->books_categories = new ArrayCollection();
+        $this->books_pages = new ArrayCollection();
     }
 
     /**
@@ -215,6 +232,42 @@ class Book
     public function setBooksCategories($books_categories)
     {
         $this->books_categories = $books_categories;
+        return $this;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getBooksPages()
+    {
+        return $this->books_pages;
+    }
+
+    /**
+     * @param ArrayCollection $books_pages
+     * @return Book
+     */
+    public function setBooksPages($books_pages)
+    {
+        $this->books_pages = $books_pages;
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPageCount()
+    {
+        return $this->page_count;
+    }
+
+    /**
+     * @param int $page_count
+     * @return Book
+     */
+    public function setPageCount($page_count)
+    {
+        $this->page_count = $page_count;
         return $this;
     }
 

@@ -27,6 +27,7 @@
 /web/compiled
 /web/bundles/
 /web/uploads/
+/web/sitemap*
 !web/compiled/.gitkeep
 
 # PHPUnit

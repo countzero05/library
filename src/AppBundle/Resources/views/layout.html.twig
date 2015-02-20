@@ -5,11 +5,11 @@
     <meta charset="UTF-8">
     <meta name="robots" content="index,follow"/>
     <meta name="keywords"
-          content="{% block keywords %}Библиотека художественной литературы, читать с мобильного{% endblock %}"/>
+          content="{% spaceless %}{% block keywords %}Библиотека художественной литературы, читать с мобильного{% endblock %}{% endspaceless %}"/>
     <meta name="description"
-          content="{% block description %}Библиотека художественной литературы, читать с мобильного{% endblock %}"/>
+          content="{% spaceless %}{% block description %}Библиотека художественной литературы, читать с мобильного{% endblock %}{% endspaceless %}"/>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <title>{% block title %}Библиотека художественной литературы{% endblock %}</title>
+    <title>{% spaceless %}{% block title %}Библиотека художественной литературы{% endblock %}{% endspaceless %}</title>
     {% stylesheets
     '@AppBundle/Resources/public/css/bootstrap.css'
     '@PinanoSelect2Bundle/Resources/public/css/select2.css'

@@ -84,6 +84,11 @@ h1 {
     text-align: center;
 }
 
+h2 {
+    font-size: 22px;
+    text-align: center;
+}
+
 .container .navbar {
     float: none;
     box-shadow: none;

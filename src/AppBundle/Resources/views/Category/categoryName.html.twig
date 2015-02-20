@@ -2,12 +2,13 @@
 
 {% block description %}{{ 'Читать на мобильном книги в категории ' ~ category.name ~ ' бесплатно. Художественная литература на любой вкус' }}{% endblock %}
 
-{% block keywords %}
+{% block keywords %}{% spaceless %}
   {% if category.parent %}
     {{ [category.parent.name, category.name, parent()]|join(', ') }}
   {% else %}
     {{ [category.name, parent()]|join(', ') }}
   {% endif %}
+{% endspaceless %}
 {% endblock %}
 
 {% block title %}

@@ -1,6 +1,6 @@
 {% extends app.request.isXmlHttpRequest ? 'AppBundle::ajax.html.twig' : 'AppBundle::layout.html.twig' %}
 
-{% block description %}{{ 'Читать на мобильном книги в категории' ~ category.name ~ ' бесплатно. Художественная литература на любой вкус' }}{% endblock %}
+{% block description %}{{ 'Читать на мобильном книги в категории ' ~ category.name ~ ' бесплатно. Художественная литература на любой вкус' }}{% endblock %}
 
 {% block keywords %}
   {% if category.parent %}

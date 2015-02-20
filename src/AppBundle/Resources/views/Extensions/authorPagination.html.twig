@@ -1,18 +1,18 @@
 <div class="pagination-div">
   <ul class="pagination">
     {% if prev is not null %}
-      <li><a href="{{ path('author_letter', {page: prev, letter: app.request.attributes.get('letter', 'А')}) }}" aria-label="Previous"><span
+      <li><a lang="ru" href="{{ path('author_letter', {page: prev, letter: app.request.attributes.get('letter', 'А')}) }}" aria-label="Previous"><span
               aria-hidden="true">«</span></a></li>
     {% endif %}
     {% for i in pages %}
       {% if i == page %}
-        <li class="active"><a href="{{ path('author_letter', {page: i, letter: app.request.attributes.get('letter', 'А')}) }}">{{ i }}</a></li>
+        <li class="active"><a lang="ru" href="{{ path('author_letter', {page: i, letter: app.request.attributes.get('letter', 'А')}) }}">{{ i }}</a></li>
       {% else %}
-        <li><a href="{{ path('author_letter', {page: i, letter: app.request.attributes.get('letter', 'А')}) }}">{{ i }}</a></li>
+        <li><a lang="ru" href="{{ path('author_letter', {page: i, letter: app.request.attributes.get('letter', 'А')}) }}">{{ i }}</a></li>
       {% endif %}
     {% endfor %}
     {% if next is not null %}
-      <li><a href="{{ path('author_letter', {page: next, letter: app.request.attributes.get('letter', 'А')}) }}" aria-label="Next"><span
+      <li><a lang="ru" href="{{ path('author_letter', {page: next, letter: app.request.attributes.get('letter', 'А')}) }}" aria-label="Next"><span
               aria-hidden="true">»</span></a></li>
     {% endif %}
   </ul>

@@ -1,7 +1,7 @@
 <menu class="row" id="left-menu">
   <div class="btn-group-vertical col-lg-12 col-md-12 col-sm-12">
     {% for category in categories %}
-      <a href="{{ path('category', {'slug': category.slug}) }}" class="btn btn-default">{{ category.name }}</a>
+      <a lang="ru" href="{{ path('category', {'slug': category.slug}) }}" class="btn btn-default">{{ category.name }}</a>
     {% endfor %}
   </div>
 </menu>

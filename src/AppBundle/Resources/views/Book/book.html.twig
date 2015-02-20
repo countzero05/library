@@ -26,7 +26,7 @@
 
 {% block content %}
   <div>
-    <h6>Автор: <a href="{{ path('author_name', {slug: book.author.slug}) }}">{{ book.author.name }}</a>
+    <h6>Автор: <a lang="ru" href="{{ path('author_name', {slug: book.author.slug}) }}">{{ book.author.name }}</a>
     </h6>
     <h6>Категория: <a
           href="{{ path('category_name', {slug: book.booksCategories.first.slug}) }}">{{ book.booksCategories.first.name }}</a>

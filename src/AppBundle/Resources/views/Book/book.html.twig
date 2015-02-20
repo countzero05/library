@@ -38,13 +38,13 @@
       <span itemprop="name">{{ book.author.name }}</span>
     </h2>
   </div>
-  <menu id="center-menu" class="row">
+  <nav id="center-menu" class="row">
     {{ pagination(app.request.attributes.getInt('page', 1), book.pageCount, 1, 7, {slug: app.request.attributes.get('slug')})|raw }}
     <div id="book-content"
          class="btn-group-vertical col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2 col-sm-12 col-xs-12">
       <pre>{{ bookPage.content }}</pre>
     </div>
     {{ pagination(app.request.attributes.getInt('page', 1), book.pageCount, 1, 7, {slug: app.request.attributes.get('slug')})|raw }}
-  </menu>
+  </nav>
 
 {% endblock %}

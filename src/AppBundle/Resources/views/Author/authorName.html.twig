@@ -21,13 +21,13 @@
 
 {% block content %}
   <h1>{{ author.name }}</h1>
-  <menu id="center-menu" class="row">
+  <nav id="center-menu" class="row">
     {% for book in author.books %}
       <div class="btn-group-vertical col-lg-6 col-md-6 col-sm-6 col-xs-12">
         <a lang="ru" class="btn btn-default" href="{{ path('book', {slug: book.slug}) }}"
             >{{ book.name }}</a>
       </div>
     {% endfor %}
-  </menu>
+  </nav>
 
 {% endblock %}

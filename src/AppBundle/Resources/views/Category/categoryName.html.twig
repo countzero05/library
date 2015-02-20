@@ -36,7 +36,7 @@
   {% endblock breadcrumbs %}
 
 {% block content %}
-  <menu id="center-menu" class="row">
+  <nav id="center-menu" class="row">
     {% if category.categories.count > 0 %}
       {% for sub_category in category.categories %}
         <div
@@ -55,5 +55,5 @@
       {% endfor %}
       {{ pagination(app.request.query.getInt('page', 1), authorsCount, 60, 7, {slug: app.request.attributes.get('slug')})|raw }}
     {% endif %}
-  </menu>
+  </nav>
 {% endblock %}

@@ -1,12 +1,10 @@
 {% extends app.request.isXmlHttpRequest ? 'AppBundle::ajax.html.twig' : 'AppBundle::layout.html.twig' %}
 
-{% block keywords %}
-  {{ [parent(), 'Категории']|join(', ') }}
-{% endblock %}
+{% block description %}Читать на мобильном книги в любом из 15 разделов бесплатно. Художественная литература на любой вкус.{% endblock %}
 
-{% block title %}
-  {{ ['Библиотека художественной литературы', 'Категории']|join(' - ') }}
-{% endblock %}
+{% block keywords %}читать, книги, книгу, бесплатно, онлайн, литература, книги бесплатно, бесплатная библиотека, книги онлайн, читать книги, бесплатные книги, без регистрации, читать бесплатно, читать книги онлайн, библиотека на мобильном, читать книги бесплатно{% endblock %}
+
+{% block title %}{{ ['Категории', 'hudlit.info - Бесплатно читать книги онлайн без регистрации на мобильном']|join(' - ') }}{% endblock %}
 
   {% block breadcrumbs %}
     {% include 'AppBundle:Template:breadcrumb.html.twig' with {links: {
@@ -18,12 +16,12 @@
 
 {% block content %}
   <menu id="center-menu" class="row">
-      {% for category in categories %}
-        <div
-            class="btn-group-vertical col-lg-6 col-lg-offset-0 col-md-6 col-md-offset-0 col-sm-10 col-sm-offset-1 col-xs-12">
-          <a href="{{ path('category_name', {slug: category.slug}) }}"
-             class="btn btn-default">{{ category.name }}</a>
-        </div>
-      {% endfor %}
+    {% for category in categories %}
+      <div
+          class="btn-group-vertical col-lg-6 col-lg-offset-0 col-md-6 col-md-offset-0 col-sm-10 col-sm-offset-1 col-xs-12">
+        <a href="{{ path('category_name', {slug: category.slug}) }}"
+           class="btn btn-default">{{ category.name }}</a>
+      </div>
+    {% endfor %}
   </menu>
 {% endblock %}

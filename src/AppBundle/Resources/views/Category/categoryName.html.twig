@@ -1,18 +1,20 @@
 {% extends app.request.isXmlHttpRequest ? 'AppBundle::ajax.html.twig' : 'AppBundle::layout.html.twig' %}
 
+{% block description %}{{ 'Читать на мобильном книги в категории' ~ category.name ~ ' бесплатно. Художественная литература на любой вкус' }}{% endblock %}
+
 {% block keywords %}
   {% if category.parent %}
-    {{ [parent(), 'Категории',category.parent.name, category.name]|join(', ') }}
+    {{ [category.parent.name, category.name, parent()]|join(', ') }}
   {% else %}
-    {{ [parent(), 'Категории',category.name]|join(', ') }}
+    {{ [category.name, parent()]|join(', ') }}
   {% endif %}
 {% endblock %}
 
 {% block title %}
   {% if category.parent %}
-    {{ ['Библиотека художественной литературы', 'Категории', category.parent.name, category.name]|join(' - ') }}
+    {{ [category.name, category.parent.name, 'Категории', 'hudlit.info - Бесплатно читать книги онлайн без регистрации на мобильном']|join(' - ') }}
   {% else %}
-    {{ ['Библиотека художественной литературы', 'Категории', category.name]|join(' - ') }}
+    {{ [category.name, 'Категории', 'hudlit.info - Бесплатно читать книги онлайн без регистрации на мобильном']|join(' - ') }}
   {% endif %}
 {% endblock %}
 
@@ -36,13 +38,13 @@
 {% block content %}
   <menu id="center-menu" class="row">
     {% if category.categories.count > 0 %}
-        {% for sub_category in category.categories %}
-          <div
-              class="btn-group-vertical col-lg-6 col-lg-offset-0 col-md-6 col-md-offset-0 col-sm-10 col-sm-offset-1 col-xs-12">
-            <a href="{{ path('category_name', {slug: sub_category.slug}) }}"
-               class="btn btn-default">{{ sub_category.name }}</a>
-          </div>
-        {% endfor %}
+      {% for sub_category in category.categories %}
+        <div
+            class="btn-group-vertical col-lg-6 col-lg-offset-0 col-md-6 col-md-offset-0 col-sm-10 col-sm-offset-1 col-xs-12">
+          <a href="{{ path('category_name', {slug: sub_category.slug}) }}"
+             class="btn btn-default">{{ sub_category.name }}</a>
+        </div>
+      {% endfor %}
     {% else %}
       {{ pagination(app.request.query.getInt('page', 1), authorsCount, 60, 7, {slug: app.request.attributes.get('slug')})|raw }}
       {% for author in authors %}

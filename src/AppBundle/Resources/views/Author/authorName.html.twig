@@ -1,11 +1,13 @@
 {% extends app.request.isXmlHttpRequest ? 'AppBundle::ajax.html.twig' : 'AppBundle::layout.html.twig' %}
 
+{% block description %}{{ 'Читать на мобильном книги автора ' ~ author.name ~ ' бесплатно' }}{% endblock %}
+
 {% block keywords %}
   {{ [parent(), 'Авторы', author.name]|join(', ') }}
 {% endblock %}
 
 {% block title %}
-  {{ ['Библиотека художественной литературы', 'Авторы', author.name]|join(' - ') }}
+  {{ [author.name, 'Авторы', 'hudlit.info - Бесплатно читать книги онлайн без регистрации на мобильном']|join(' - ') }}
 {% endblock %}
 
   {% block breadcrumbs %}

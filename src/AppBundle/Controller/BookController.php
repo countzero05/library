@@ -17,6 +17,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\Debug\Exception\FatalErrorException;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
@@ -36,6 +37,17 @@ class BookController extends DefaultController
      */
     public function bookAction(Request $request, $slug, $page)
     {
+        if (preg_match('/\-$/', $slug)) {
+            $slug = mb_substr($slug, 0, mb_strlen($slug, 'utf-8') - 1, 'utf-8');
+
+            if ($request->attributes->get('_route') === 'book') {
+                $url = $this->generateUrl('book', ['slug' => $slug]);
+            } else {
+                $url = $this->generateUrl('book_page', ['slug' => $slug, 'page' => $page]);
+            }
+            return new RedirectResponse($url, 301);
+        }
+
         $request->attributes->set('_route', 'book_page');
 
         /** @var Book $book */

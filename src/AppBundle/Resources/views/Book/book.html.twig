@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block title %}
-  {{ [book.name, book.author.name, 'hudlit.info - Бесплатно читать книги онлайн без регистрации на мобильном']|join(' - ') }}
+  {{ [book.name, book.author.name, 'hudlit.info - Бесплатно читать книги онлайн без регистрации на мобильном', ('Страница ' ~ app.request.attributes.getInt('page', 1))]|join(' - ') }}
 {% endblock %}
 
 {% block container_class %}

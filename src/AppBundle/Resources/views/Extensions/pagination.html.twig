@@ -1,15 +1,15 @@
 <nav class="pagination-div">
   <ul class="pager">
     {% if (page - 1) > 0 %}
-      <li><a lang="ru" href="{{ path(app.request.get('_route'), {page: prev}|merge(extra)) }}"
+      <li><a lang="ru" href="{{ path(app.request.get('_route'), {page: (page - 1)}|merge(extra)) }}"
              aria-label="Previous"><span
-              aria-hidden="true">&larr;</span> Previous</a></li>
+              aria-hidden="true">&larr;</span> Предыдущая</a></li>
     {% endif %}
     <li><a class="centered"><span>{{ page }} / {{ pageCount }}</span></a></li>
     {#<li><a class="form-control">Страница <input type="text" value="{{ page }}"/>/{{ pageCount }}</a></li>#}
-    {% if next is not null %}
-      <li><a lang="ru" href="{{ path(app.request.get('_route'), {page: next}|merge(extra)) }}"
-             aria-label="Next">Next <span
+    {% if (page + 1) <= pageCount %}
+      <li><a lang="ru" href="{{ path(app.request.get('_route'), {page: (page + 1)}|merge(extra)) }}"
+             aria-label="Next">Следующая <span
               aria-hidden="true">&rarr;</span></a></li>
     {% endif %}
   </ul>

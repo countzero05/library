@@ -144,3 +144,12 @@ h2 {
     color: inherit;
     width: 100px;
 }
+
+.author-pagination a {
+    width: 47px;
+    height: 37px;
+}
+
+.author-pagination > li:first-child > a {
+    margin-left: -1px;
+}

@@ -28,6 +28,8 @@
     {% endfor %}
   </nav>
 
+  <br />
+
   {{ author_pagination(app.request.query.getInt('page', 1), authorsCount, 60, 7)|raw }}
   {{ author_letter_pagination(app.request.attributes.get('letter', 'А'), allLetters)|raw }}
 

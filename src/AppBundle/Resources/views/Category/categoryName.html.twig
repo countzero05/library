@@ -53,6 +53,7 @@
              class="btn btn-default">{{ author.name }}</a>
         </div>
       {% endfor %}
+      <div class="clearfix"></div>
       {{ pagination(app.request.query.getInt('page', 1), authorsCount, 60, 7, {slug: app.request.attributes.get('slug')})|raw }}
     {% endif %}
   </nav>

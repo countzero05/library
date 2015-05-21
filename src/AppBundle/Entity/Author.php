@@ -60,6 +60,20 @@ class Author
      */
     private $updated;
 
+    /**
+     * @var \DateTime $biography_updated
+     *
+     * @ORM\Column(name="biography_updated", type="datetime", nullable=true)
+     */
+    private $biography_updated;
+
+    /**
+     * @var \string $biography
+     *
+     * @ORM\Column(name="biography", type="text", nullable=true)
+     */
+    private $biography;
+
     public function __construct()
     {
         $this->books = new ArrayCollection();
@@ -181,6 +195,42 @@ class Author
         }
 
         return array_unique($categories);
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getBiographyUpdated()
+    {
+        return $this->biography_updated;
+    }
+
+    /**
+     * @param \DateTime $biography_updated
+     * @return Author
+     */
+    public function setBiographyUpdated($biography_updated)
+    {
+        $this->biography_updated = $biography_updated;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBiography()
+    {
+        return $this->biography;
+    }
+
+    /**
+     * @param string $biography
+     * @return Author
+     */
+    public function setBiography($biography)
+    {
+        $this->biography = $biography;
+        return $this;
     }
 
 }

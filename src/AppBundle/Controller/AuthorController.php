@@ -9,10 +9,10 @@
 namespace AppBundle\Controller;
 
 
-use AppBundle\Controller\DefaultController;
+use AppBundle\Entity\Author;
 use Doctrine\ORM\Query;
-use Doctrine\ORM\QueryBuilder;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -69,18 +69,25 @@ class AuthorController extends DefaultController
 
     /**
      * @Route("/{slug}", name="author_name")
+     * @ParamConverter("author", options={"mapping": {"slug": "slug"}})
+     * @Cache(lastModified="author.getUpdated()", ETag="'Author' ~ author.getId() ~ author.getUpdated().format('r')")
      * @Template()
      */
-    public function authorNameAction($slug)
+    public function authorNameAction(Author $author)
     {
-        $author = $this->getAuthorRepository()
-            ->createQueryBuilder('a')
-            ->where('a.slug = :slug')
-            ->setParameters(['slug' => $slug])
-            ->getQuery()
-            ->useResultCache(true, 3600)
-            ->getOneOrNullResult();
+        return [
+            'author' => $author
+        ];
+    }
 
+    /**
+     * @Route("/{slug}/biography", name="author_biography")
+     * @ParamConverter("author", options={"mapping": {"slug": "slug"}})
+     * @Cache(lastModified="author.getBiographyUpdated()", ETag="'Author' ~ author.getId() ~ author.getBiographyUpdated().format('r')")
+     * @Template()
+     */
+    public function biographyAction(Author $author)
+    {
         return [
             'author' => $author
         ];

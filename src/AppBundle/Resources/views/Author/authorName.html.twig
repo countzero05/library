@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block title %}
-  {{ [author.name, 'Авторы', 'hudlit.info - Бесплатно читать книги онлайн без регистрации на мобильном']|join(' - ') }}
+  {{ [author.name, 'hudlit.info - Бесплатно читать книги онлайн без регистрации на мобильном']|join(' - ') }}
 {% endblock %}
 
   {% block breadcrumbs %}
@@ -21,6 +21,18 @@
 
 {% block content %}
   <h1>{{ author.name }}</h1>
+  <div class="row">
+    {% if author.biography is not null %}
+      <div class="well well-sm col-lg-10 col-md-12 col-sm-12 col-xs-12 col-lg-offset-1">
+        <h2>Биография</h2>
+        <article class="biography">
+          {{ author.biography|slice(0, 500)|raw }} ... <a class="biography-link"
+                                                          href="{{ path('author_biography', { slug: author.slug }) }}">читать
+            биографию полностью</a>
+        </article>
+      </div>
+    {% endif %}
+  </div>
   <nav id="center-menu" class="row">
     {% for book in author.books %}
       <div class="btn-group-vertical col-lg-6 col-md-6 col-sm-6 col-xs-12">

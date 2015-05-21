@@ -24,11 +24,14 @@
       <div class="btn-group-vertical col-lg-4 col-md-6 col-sm-6 col-xs-12">
         <a lang="ru" href="{{ path('author_name', {slug: author.slug}) }}"
            class="btn btn-default">{{ author.name }}</a>
+        {% if author.biography is not null %}
+          <a class="list-biography-link" href="{{ path('author_biography', {slug: author.slug}) }}">биография</a>
+        {% endif %}
       </div>
     {% endfor %}
   </nav>
 
-  <br />
+  <br/>
 
   {{ author_pagination(app.request.query.getInt('page', 1), authorsCount, 60, 7)|raw }}
   {{ author_letter_pagination(app.request.attributes.get('letter', 'А'), allLetters)|raw }}

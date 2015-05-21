@@ -54,23 +54,23 @@ class SitemapCommand extends ContainerAwareCommand
         $router = $this->getContainer()->get('router');
 
         // add some urls homepage
-        $urls[] = array('loc' => $router->generate('homepage'), 'changefreq' => 'weekly', 'priority' => '1.0');
+        $urls[] = array('loc' => $router->generate('homepage'), 'changefreq' => 'weekly', 'priority' => '0.1');
 
-        $urls[] = array('loc' => $router->generate('category'), 'changefreq' => 'weekly', 'priority' => '1.0');
-        $urls[] = array('loc' => $router->generate('author'), 'changefreq' => 'weekly', 'priority' => '1.0');
+        $urls[] = array('loc' => $router->generate('category'), 'changefreq' => 'weekly', 'priority' => '0.2');
+        $urls[] = array('loc' => $router->generate('author'), 'changefreq' => 'weekly', 'priority' => '0.2');
 
         /** @var \stdClass[] $categories */
         $categories = $em->getRepository('AppBundle:Category')->createQueryBuilder('c')->select('c.slug slug')->getQuery()->getScalarResult();
 
         foreach ($categories as $category) {
-            $urls[] = array('loc' => $router->generate('category_name', ['slug' => $category['slug']]), 'changefreq' => 'weekly', 'priority' => '1.0');
+            $urls[] = array('loc' => $router->generate('category_name', ['slug' => $category['slug']]), 'changefreq' => 'weekly', 'priority' => '0.3');
         }
 
         /** @var \stdClass[] $authors */
         $authors = $em->getRepository('AppBundle:Author')->createQueryBuilder('a')->select('a.slug slug')->getQuery()->getScalarResult();
 
         foreach ($authors as $author) {
-            $urls[] = array('loc' => $router->generate('author_name', ['slug' => $author['slug']]), 'changefreq' => 'weekly', 'priority' => '1.0');
+            $urls[] = array('loc' => $router->generate('author_name', ['slug' => $author['slug']]), 'changefreq' => 'weekly', 'priority' => '0.6');
         }
 
         /** @var \stdClass[] $books */

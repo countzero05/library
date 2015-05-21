@@ -153,3 +153,58 @@ h2 {
 .author-pagination > li:first-child > a {
     margin-left: -1px;
 }
+
+article.biography {
+    text-align: justify;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+article.biography p {
+    text-indent: 20px;
+}
+
+article.biography .bio-list {
+    white-space: pre-wrap;
+    line-height: 20px;
+}
+
+article.biography .bio-blockquote {
+    white-space: pre-wrap;
+    line-height: 20px;
+    font-style: italic;
+    margin: 20px 40px;
+    color: #000000;
+}
+
+article.biography .bio-blockquote:before {
+    content: open-quote;
+}
+article.biography .bio-blockquote:after {
+    content: close-quote;
+}
+
+article.biography .bio-heading {
+    font-weight: 500;
+    line-height: 40px;
+    text-align: center;
+    font-size: 15px;
+    text-decoration: underline;
+    color: rgb(51, 51, 51);
+}
+
+.biography-link {
+    font-size: 13px;
+}
+
+.list-biography-link {
+    position: absolute;
+    z-index: 10;
+    margin-top: -18px;
+    right: 20px;
+}
+
+.wikipedia-link {
+    text-align: right;
+    font-style: italic;
+}

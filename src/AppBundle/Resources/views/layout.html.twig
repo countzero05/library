@@ -11,6 +11,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <title>{% spaceless %}{% block title %}Библиотека художественной литературы{% endblock %}{% endspaceless %}</title>
     <link rel="icon" sizes="16x16" href="/favicon.ico"/>
+    {% stylesheets
+    '@AppBundle/Resources/public/css/bootstrap.css'
+    '@AppBundle/Resources/public/bower_components/select2/dist/css/select2.min.css'
+    '@AppBundle/Resources/public/css/style.css'
+    output='style.css'
+    filter='?yui_css' %}
+    <link rel="stylesheet" href="{{ asset_url }}"/>
+    {% endstylesheets %}
   </head>
 
   <body>
@@ -75,14 +83,6 @@
   <script {% if app.environment == 'prod' %} async="async"{% endif %} type="text/javascript"
                                                                       src="{{ asset_url }}"></script>
   {% endjavascripts %}
-  {% stylesheets
-  '@AppBundle/Resources/public/css/bootstrap.css'
-  '@AppBundle/Resources/public/bower_components/select2/dist/css/select2.min.css'
-  '@AppBundle/Resources/public/css/style.css'
-  output='style.css'
-  filter='?yui_css' %}
-  <link rel="stylesheet" href="{{ asset_url }}"/>
-  {% endstylesheets %}
 
   {% if app.environment == 'prod' %}
     <script async="async">

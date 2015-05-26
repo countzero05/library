@@ -70,7 +70,7 @@ header {
 
 @media (max-width: 800px) {
     header {
-        font-size: 19px;
+        font-size: 27px;
     }
 
     h1 {
@@ -83,6 +83,13 @@ header {
 
     .breadcrumb {
         margin-bottom: 0;
+    }
+
+}
+
+@media (max-width: 500px) {
+    header {
+        font-size: 15px;
     }
 
 }
@@ -114,6 +121,7 @@ h2 {
     box-shadow: none;
     -webkit-box-shadow: none;
     margin-bottom: inherit;
+    white-space: nowrap;
 }
 
 #center-menu {

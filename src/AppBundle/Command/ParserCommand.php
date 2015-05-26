@@ -6,7 +6,6 @@ use AppBundle\Entity\Author;
 use AppBundle\Entity\Book;
 use AppBundle\Entity\Category;
 use Doctrine\Bundle\DoctrineBundle\Registry;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Driver\PDOConnection;
 use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;

@@ -9,9 +9,9 @@
 namespace AppBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -20,11 +20,14 @@ use Symfony\Component\Routing\Annotation\Route;
  * @Cache(expires="-1 minute", public="true", smaxage="60")
  * @Route("/")
  */
-class SearchController extends DefaultController
+class SearchController extends Controller
 {
 
     /**
      * @Route("/search", name="search")
+     * @param Request $request
+     * @return JsonResponse
+     * @throws \Exception
      */
     public function searchAction(Request $request)
     {

@@ -9,7 +9,6 @@
 namespace AppBundle\Controller;
 
 
-use AppBundle\Controller\DefaultController;
 use AppBundle\Entity\Category;
 use Doctrine\ORM\Query;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
@@ -29,7 +28,7 @@ class CategoryController extends DefaultController
      * @Route("/", name="category")
      * @Template()
      */
-    public function categoryAction(Request $request)
+    public function categoryAction()
     {
         $categories = $this->getCategoryRepository()
             ->createQueryBuilder('c')
@@ -47,6 +46,10 @@ class CategoryController extends DefaultController
     /**
      * @Route("/{slug}", name="category_name")
      * @Template()
+     * @param Request $request
+     * @param $slug
+     * @return array
+     * @throws \Doctrine\ORM\NonUniqueResultException
      */
     public function categoryNameAction(Request $request, $slug)
     {

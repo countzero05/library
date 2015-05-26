@@ -9,13 +9,11 @@
 namespace AppBundle\Controller;
 
 
-use AppBundle\Controller\DefaultController;
 use AppBundle\Entity\Book;
 use AppBundle\Entity\BookPage;
 use Doctrine\ORM\EntityManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Component\Debug\Exception\FatalErrorException;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -34,6 +32,12 @@ class BookController extends DefaultController
      * @Route("/{slug}", name="book", defaults={"page" = 1})
      * @Route("/{slug}/page/{page}", name="book_page", defaults={"page" = 1}, requirements={"page": "\d+"})
      * @Template()
+     * @param Request $request
+     * @param $slug
+     * @param $page
+     * @return array|RedirectResponse
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws \Exception
      */
     public function bookAction(Request $request, $slug, $page)
     {
@@ -71,7 +75,7 @@ class BookController extends DefaultController
                     $bookPage = new BookPage();
 
                     $bookPage->setBook($book);
-                    $bookPage->setContent(implode("", $arr));
+                    $bookPage->setContent(implode('', $arr));
                     $bookPage->setPage(++$page);
 
                     $em->persist($bookPage);
@@ -85,7 +89,7 @@ class BookController extends DefaultController
             $em->refresh($book);
         }
 
-        if ($page > $book->getPageCount() || $page < 1) {
+        if ($page < 1 || $page > $book->getPageCount()) {
             throw new NotFoundHttpException('Book page not found');
         }
 
@@ -115,7 +119,7 @@ class BookController extends DefaultController
         if ($h !== FALSE) {
             while (($s = fgets($h)) !== FALSE) {
                 $arr[] = $s;
-                if (++$i == 40) {
+                if (++$i === 40) {
                     yield $arr;
                     $arr = [];
                     $i = 0;

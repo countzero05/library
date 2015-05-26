@@ -11,6 +11,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
 
-class CategoryRepository extends EntityRepository {
+class CategoryRepository extends EntityRepository
+{
 
 }

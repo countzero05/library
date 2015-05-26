@@ -29,6 +29,9 @@ class AuthorController extends DefaultController
      * @Route("/", name="author", defaults={"letter"="А"})
      * @Route("/letter/{letter}", name="author_letter", defaults={"letter"="А"})
      * @Template()
+     * @param Request $request
+     * @param $letter
+     * @return array
      */
     public function authorAction(Request $request, $letter)
     {
@@ -72,6 +75,8 @@ class AuthorController extends DefaultController
      * @ParamConverter("author", options={"mapping": {"slug": "slug"}})
      * @Cache(lastModified="author.getUpdated()", ETag="'Author' ~ author.getId() ~ author.getUpdated().format('r')")
      * @Template()
+     * @param Author $author
+     * @return array
      */
     public function authorNameAction(Author $author)
     {
@@ -85,6 +90,8 @@ class AuthorController extends DefaultController
      * @ParamConverter("author", options={"mapping": {"slug": "slug"}})
      * @Cache(lastModified="author.getBiographyUpdated()", ETag="'Author' ~ author.getId() ~ author.getBiographyUpdated().format('r')")
      * @Template()
+     * @param Author $author
+     * @return array
      */
     public function biographyAction(Author $author)
     {

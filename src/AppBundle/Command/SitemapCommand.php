@@ -6,6 +6,7 @@ use AppBundle\Entity\Author;
 use AppBundle\Entity\Book;
 use AppBundle\Entity\Category;
 use Doctrine\Bundle\DoctrineBundle\Registry;
+use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
@@ -24,7 +25,7 @@ class SitemapCommand extends ContainerAwareCommand
     }
 
     /**
-     * @return EntityManager
+     * @return ObjectManager
      */
     protected function getManager()
     {
@@ -34,7 +35,7 @@ class SitemapCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('sitemap:generate')
+            ->setName('library:sitemap')
             ->setDescription('Generate sitemap')
             ->addOption('domain', 'd', InputOption::VALUE_REQUIRED, 'domain name of site required');
     }
@@ -84,7 +85,7 @@ class SitemapCommand extends ContainerAwareCommand
 
         $templating = $this->getContainer()->get('templating');
 
-        $s = $templating->render('TwigBundle/views/Sitemap/index.xml.twig', ['sitemapCount' => $sitemapCount, 'hostname' => $hostname]);
+        $s = $templating->render('Sitemap/index.xml.twig', ['sitemapCount' => $sitemapCount, 'hostname' => $hostname]);
         file_put_contents($this->getContainer()->getParameter('kernel.root_dir') . '/../web/sitemap.xml', $s);
 
         $i = 0;
@@ -92,7 +93,7 @@ class SitemapCommand extends ContainerAwareCommand
         while (count($urls)) {
             $arr = array_splice($urls, 0, 30000);
 
-            $s = $templating->render('TwigBundle/views/Sitemap/sitemap.xml.twig', ['urls' => $arr, 'hostname' => $hostname]);
+            $s = $templating->render('Sitemap/sitemap.xml.twig', ['urls' => $arr, 'hostname' => $hostname]);
             file_put_contents($this->getContainer()->getParameter('kernel.root_dir') . '/../web/sitemap' . ++$i . '.xml', $s);
         }
 

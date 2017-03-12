@@ -1,15 +1,11 @@
 <?php
+
 namespace AppBundle\Twig\Extension;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 class Pagination extends \Twig_Extension
 {
-    /**
-     * @var \Twig_Environment $environment
-     */
-    protected $environment;
-
     /**
      * @var ContainerInterface
      */
@@ -20,18 +16,13 @@ class Pagination extends \Twig_Extension
         $this->container = $container;
     }
 
-    public function initRuntime(\Twig_Environment $environment)
-    {
-        $this->environment = $environment;
-    }
-
     public function getFunctions()
     {
-        return array(
-            'pagination' => new \Twig_Function_Method($this, 'pagination'),
-            'author_pagination' => new \Twig_Function_Method($this, 'authorPagination'),
-            'author_letter_pagination' => new \Twig_Function_Method($this, 'authorLetterPagination')
-        );
+        return [
+            new \Twig_SimpleFunction ('pagination', [$this, 'pagination']),
+            new \Twig_SimpleFunction ('author_pagination', [$this, 'authorPagination']),
+            new \Twig_SimpleFunction ('author_letter_pagination', [$this, 'authorLetterPagination'])
+        ];
     }
 
     public function pagination($page, $rowCount, $rowsPerPage = 60, $pagesPerPagination = 11, $extra)

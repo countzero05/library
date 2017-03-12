@@ -1,7 +1,4 @@
 parameters:
-    search_manager.class: AppBundle\Service\SearchManager
-    search_factory.class: AppBundle\Service\SearchFactory
-
     sphinx_host: 127.0.0.1
     sphinx_port: 9312
     sphinx_collection: library
@@ -9,26 +6,20 @@ parameters:
 services:
     app.twig.menu_extension:
         class: AppBundle\Twig\Extension\Menu
-        arguments:  [@service_container]
+        arguments:  ['@doctrine']
         tags:
             - { name: twig.extension }
 
     app.twig.pagination_extension:
         class: AppBundle\Twig\Extension\Pagination
-        arguments:  [@service_container]
+        arguments:  ['@service_container']
         tags:
             - { name: 'twig.extension' }
 
-    search_factory:
-        class:            %search_factory.class%
-        arguments:
-            -             @service_container
-            -             %sphinx_host%
-            -             %sphinx_port%
-            -             %sphinx_collection%
     search_manager:
-        class:            %search_manager.class%
-        factory_service:  search_factory
-        factory_method:   get
+        class:            AppBundle\Service\SearchManager
         arguments:
-            -             @service_container
+            -             '@router'
+            -             '%sphinx_host%'
+            -             '%sphinx_port%'
+            -             '%sphinx_collection%'

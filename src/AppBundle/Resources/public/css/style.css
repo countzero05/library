@@ -5,6 +5,7 @@ a {
 .breadcrumb {
     white-space: nowrap;
     overflow-x: hidden;
+    font-size: 12px;
 }
 
 #book-content {
@@ -49,15 +50,25 @@ header {
     margin-right: auto;
 }
 
+a {
+    font-size: 12px;
+}
+
+.pagination-div a {
+    font-size: 12px;
+}
+
 @media (max-width: 630px) {
     #book-content {
         padding: 0;
     }
 
     #book-content pre {
-        white-space: pre-line;
+        white-space: pre-wrap;
         padding: 10px;
         border: none;
+        text-align: justify;
+        word-break: keep-all;
     }
 }
 
@@ -92,6 +103,12 @@ header {
         font-size: 15px;
     }
 
+}
+
+@media (min-width: 1000px) {
+    .book-name {
+        margin-top: -50px;
+    }
 }
 
 hr {
@@ -153,7 +170,7 @@ h2 {
 }
 
 .author-pagination a {
-    width: 47px;
+    width: 37px;
     height: 37px;
 }
 
@@ -165,6 +182,9 @@ article.biography {
     text-align: justify;
     padding-left: 10px;
     padding-right: 10px;
+    padding-bottom: 10px;
+    font-style: italic;
+    font-size: 12px;
 }
 
 article.biography p {
@@ -210,6 +230,8 @@ article.biography .bio-heading {
     z-index: 10;
     margin-top: -18px;
     right: 20px;
+    font-size: 12px;
+    opacity: 0.8;
 }
 
 .wikipedia-link {

@@ -1,33 +1,51 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: admin
- * Date: 2/13/15
- * Time: 6:26 PM
- */
 
 namespace AppBundle\Service;
 
-use AppBundle\Entity\Author;
-use Doctrine\ORM\Query;
-use Symfony\Component\DependencyInjection\ContainerInterface;
+use IAkumaI\SphinxsearchBundle\Search\Sphinxsearch;
+use Symfony\Component\Routing\Router;
+require_once __DIR__ . "/../../../vendor/iakumai/sphinxsearch-bundle/IAkumaI/SphinxsearchBundle/Sphinx/SphinxAPI.php";
 
 class SearchManager
 {
-    /**
-     * @var ContainerInterface
-     */
-    protected $constainer;
 
     /**
-     * @var \SphinxClient
+     * @var Router
      */
-    protected $sphinx;
+    private $router;
+    /**
+     * @var Sphinxsearch
+     */
+    private $sphinx;
+    /**
+     * @var string
+     */
+    private $host;
+    /**
+     * @var string
+     */
+    private $port;
+    /**
+     * @var string
+     */
+    private $indexName;
 
-    public function __construct(ContainerInterface $container, \SphinxClient $sphinx)
+    /**
+     * SearchManager constructor.
+     * @param Router $router
+     * @param string $host
+     * @param string $port
+     * @param string $indexName
+     */
+    public function __construct(Router $router, string $host, string $port, string $indexName)
     {
-        $this->container = $container;
-        $this->sphinx = $sphinx;
+        $this->router = $router;
+
+        $this->host = $host;
+        $this->port = $port;
+        $this->indexName = $indexName;
+
+        $this->sphinx = new Sphinxsearch($this->host, $this->port);
     }
 
     public function searchDocs($name)
@@ -40,7 +58,7 @@ class SearchManager
 //            'name' => 10,
 //            'value' => 10
 //        ));
-        $result = $this->sphinx->query($name . '*');
+        $result = $this->sphinx->search($name . '*', [$this->indexName]);
 
         if (!$result || !$result['total']) {
             return array();
@@ -49,7 +67,7 @@ class SearchManager
         $searchs = array();
 
         foreach ($result['matches'] as $match) {
-            $pres = $this->sphinx->BuildExcerpts([$match['attrs']['name']], 'library', $name . '*', array(
+            $pres = $this->sphinx->BuildExcerpts([$match['attrs']['name']], $this->indexName, $name . '*', array(
                 'limit' => 200,
                 'exact_phrase' => false,
                 //'before_match' => '',
@@ -63,7 +81,7 @@ class SearchManager
 
             $searchs[] = [
                 'result' => $pres[0],
-                'path' => ($docType === 'authors') ? $this->container->get('router')->generate('author_name', ['slug' => $attrs['slug']]) : $this->container->get('router')->generate('book', ['slug' => $attrs['slug']]),
+                'path' => ($docType === 'authors') ? $this->router->generate('author_name', ['slug' => $attrs['slug']]) : $this->router->generate('book', ['slug' => $attrs['slug']]),
                 'doc_type' => $docType
             ];
 

@@ -1,109 +1,112 @@
 {% spaceless %}
-  <!DOCTYPE html>
-  <html lang="ru">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="robots" content="index,follow"/>
-    <meta name="keywords"
-          content="{% spaceless %}{% block keywords %}Библиотека художественной литературы, читать с мобильного{% endblock %}{% endspaceless %}"/>
-    <meta name="description"
-          content="{% spaceless %}{% block description %}Библиотека художественной литературы, читать с мобильного{% endblock %}{% endspaceless %}"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-    <title>{% spaceless %}{% block title %}Библиотека художественной литературы{% endblock %}{% endspaceless %}</title>
-    <link rel="icon" sizes="16x16" href="/favicon.ico"/>
-    {% stylesheets
-    '@AppBundle/Resources/public/css/bootstrap.css'
-    '@AppBundle/Resources/public/bower_components/select2/dist/css/select2.min.css'
-    '@AppBundle/Resources/public/css/style.css'
-    output='style.css'
-    filter='?yui_css' %}
-    <link rel="stylesheet" href="{{ asset_url }}"/>
-    {% endstylesheets %}
-  </head>
+    <!DOCTYPE html>
+    <html lang="ru">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="robots" content="index,follow"/>
+        <meta name="keywords"
+              content="{% spaceless %}{% block keywords %}Библиотека художественной литературы, читать с мобильного{% endblock %}{% endspaceless %}"/>
+        <meta name="description"
+              content="{% spaceless %}{% block description %}Библиотека художественной литературы, читать с мобильного{% endblock %}{% endspaceless %}"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+        <title>{% spaceless %}{% block title %}Библиотека художественной литературы{% endblock %}{% endspaceless %}</title>
+        <link rel="icon" sizes="16x16" href="/favicon.ico"/>
+        {% stylesheets
+        '@AppBundle/Resources/public/bower_components/bootstrap/dist/css/bootstrap.min.css'
+        '@AppBundle/Resources/public/bower_components/select2/dist/css/select2.min.css'
+        '@AppBundle/Resources/public/css/style.css'
+        output='style.css'
+        filter='?uglifycss' %}
+        <link rel="stylesheet" href="{{ asset_url }}"/>
+        {% endstylesheets %}
+    </head>
 
-  <body>
-  <div class="container {% block container_class %}container-small{% endblock %}">
-    <header>Библиотека художественной литературы</header>
-    <hr/>
-    <form action="{{ path('search') }}" method="get" class="col-lg-6 col-md-8 col-sm-8 col-xs-12" id="search-str">
-      <div class="input-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
-        <select name="q" class="form-control" placeholder="Поиск по автору или названию книги"></select>
-        {#
-                            <span class="input-group-btn">
-                                <button class="btn btn-default" type="button">Искать!</button>
-                            </span>
-        #}
-      </div>
-    </form>
-    <br/>
-    <br/>
+    <body>
+    <div class="container {% block container_class %}container-small{% endblock %}">
+        <header>Библиотека художественной литературы</header>
+        <hr/>
+        <form action="{{ path('search') }}" method="get" class="col-lg-6 col-md-8 col-sm-8 col-xs-12" id="search-str">
+            <div class="input-group col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <select name="q" class="form-control" placeholder="Поиск по автору или названию книги"></select>
+                {#
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default" type="button">Искать!</button>
+                                    </span>
+                #}
+            </div>
+        </form>
+        <br/>
+        <br/>
 
-    <div class="container-fluid">
-      <!-- Collect the nav links, forms, and other content for toggling -->
-      <div class="navbar">
-        <a lang="ru" lang="ru" href="{{ path('author') }}" class="btn btn-default navbar-btn">Авторы</a>
-        <a lang="ru" lang="ru" href="{{ path('category') }}" class="btn btn-default navbar-btn">Категории</a>
-        <a id="book-read" lang="ru" lang="ru" href="#" class="btn btn-default navbar-btn hide fade in">Прочтенное</a>
-      </div>
-      <!-- /.navbar-collapse -->
+        <div class="container-fluid">
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="navbar">
+                <a lang="ru" lang="ru" href="{{ path('author') }}" class="btn btn-default navbar-btn">Авторы</a>
+                <a lang="ru" lang="ru" href="{{ path('category') }}" class="btn btn-default navbar-btn">Категории</a>
+                <a id="book-read" lang="ru" lang="ru" href="#" class="btn btn-default navbar-btn hide fade in">Прочтенное</a>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        {% block breadcrumbs %}
+            <ul class="breadcrumb">
+                <li class="active">Библиотека</li>
+            </ul>
+        {% endblock breadcrumbs %}
+        <div class="row">
+            {#
+                <div class="col-lg-3 col-md-4 col-sm-2">
+                  {{ menu()|raw }}
+                </div>
+            #}
+            <div id="content" class="col-lg-12 col-md-12 col-sm-12">
+                {% block content %}{% endblock %}
+            </div>
+        </div>
+        <hr/>
+        <footer>
+            <article>
+                Все тексты представлены только в ознакомительных целях. Все произведенные действия с текстами Вы делаете
+                только по собственному желанию и исключительно исходя из собственных потребностей. <a lang="ru"
+                                                                                                      lang="ru"
+                                                                                                      href="#">Условия
+                    использования</a>
+            </article>
+        </footer>
+        <hr/>
     </div>
-    {% block breadcrumbs %}
-      <ul class="breadcrumb">
-        <li class="active">Библиотека</li>
-      </ul>
-    {% endblock breadcrumbs %}
-    <div class="row">
-      {#
-          <div class="col-lg-3 col-md-4 col-sm-2">
-            {{ menu()|raw }}
-          </div>
-      #}
-      <div id="content" class="col-lg-12 col-md-12 col-sm-12">
-        {% block content %}{% endblock %}
-      </div>
-    </div>
-    <hr/>
-    <footer>
-      <article>
-        Все тексты представлены только в ознакомительных целях. Все произведенные действия с текстами Вы делаете
-        только по собственному желанию и исключительно исходя из собственных потребностей. <a lang="ru" lang="ru"
-                                                                                              href="#">Условия
-          использования</a>
-      </article>
-    </footer>
-    <hr/>
-  </div>
-  {% javascripts
-  '@AppBundle/Resources/public/bower_components/jquery/dist/jquery.min.js'
-  '@AppBundle/Resources/public/bower_components/bootstrap/dist/js/bootstrap.min.js'
-  '@AppBundle/Resources/public/bower_components/select2/dist/js/select2.full.min.js'
-  '@AppBundle/Resources/public/bower_components/select2/dist/js/i18n/ru.js'
-  '@AppBundle/Resources/public/js/script.js'
-  output='script.js'
-  filter='?yui_js' %}
-  <script {% if app.environment == 'prod' %} async="async"{% endif %} type="text/javascript"
-                                                                      src="{{ asset_url }}"></script>
-  {% endjavascripts %}
+    {% javascripts
+    '@AppBundle/Resources/public/bower_components/jquery/dist/jquery.min.js'
+    '@AppBundle/Resources/public/bower_components/bootstrap/dist/js/bootstrap.min.js'
+    '@AppBundle/Resources/public/bower_components/select2/dist/js/select2.full.min.js'
+    '@AppBundle/Resources/public/bower_components/select2/dist/js/i18n/ru.js'
+    '@AppBundle/Resources/public/js/script.js'
+    output='script.js'
+    filter='?uglifyjs2' %}
+    <script {% if app.environment == 'prod' %} async="async"{% endif %} type="text/javascript"
+                                                                        src="{{ asset_url }}"></script>
+    {% endjavascripts %}
 
-  {% if app.environment == 'prod' %}
-    <script async="async">
-      (function (i, s, o, g, r, a, m) {
-        i['GoogleAnalyticsObject'] = r;
-        i[r] = i[r] || function () {
-          (i[r].q = i[r].q || []).push(arguments)
-        }, i[r].l = 1 * new Date();
-        a = s.createElement(o),
-            m = s.getElementsByTagName(o)[0];
-        a.async = 1;
-        a.src = g;
-        m.parentNode.insertBefore(a, m)
-      })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+    {#
+        {% if app.environment == 'prod' %}
+            <script async="async">
+              (function (i, s, o, g, r, a, m) {
+                i['GoogleAnalyticsObject'] = r;
+                i[r] = i[r] || function () {
+                    (i[r].q = i[r].q || []).push(arguments)
+                  }, i[r].l = 1 * new Date();
+                a = s.createElement(o),
+                  m = s.getElementsByTagName(o)[0];
+                a.async = 1;
+                a.src = g;
+                m.parentNode.insertBefore(a, m)
+              })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
 
-      ga('create', 'UA-59489745-1', 'auto');
-      ga('send', 'pageview');
+              ga('create', 'UA-59489745-1', 'auto');
+              ga('send', 'pageview');
 
-    </script>
-  {% endif %}
-  </body>
-  </html>
+            </script>
+        {% endif %}
+    #}
+    </body>
+    </html>
 {% endspaceless %}

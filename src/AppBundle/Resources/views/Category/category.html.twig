@@ -4,24 +4,24 @@
 
 {% block keywords %}читать, книги, книгу, бесплатно, онлайн, литература, книги бесплатно, бесплатная библиотека, книги онлайн, читать книги, бесплатные книги, без регистрации, читать бесплатно, читать книги онлайн, библиотека на мобильном, читать книги бесплатно{% endblock %}
 
-{% block title %}{{ ['Категории', 'hudlit.info - Бесплатно читать книги онлайн без регистрации на мобильном']|join(' - ') }}{% endblock %}
+{% block title %}{{ ['Категории', libraryName ~ ' - Бесплатно читать книги онлайн без регистрации на мобильном']|join(' - ') }}{% endblock %}
 
   {% block breadcrumbs %}
-    {% include 'AppBundle:Template:breadcrumb.html.twig' with {links: {
-    'Библиотека': '/',
-    ('Категории') : ''
-    }} %}
+      {% include 'AppBundle:Template:breadcrumb.html.twig' with {links: {
+      'Библиотека': '/',
+      ('Категории') : ''
+      }} %}
   {% endblock breadcrumbs %}
 
 
 {% block content %}
-  <nav id="center-menu" class="row">
-    {% for category in categories %}
-      <div
-          class="btn-group-vertical col-lg-6 col-lg-offset-0 col-md-6 col-md-offset-0 col-sm-10 col-sm-offset-1 col-xs-12">
-        <a lang="ru" href="{{ path('category_name', {slug: category.slug}) }}"
-           class="btn btn-default">{{ category.name }}</a>
-      </div>
-    {% endfor %}
-  </nav>
+    <nav id="center-menu" class="row">
+        {% for category in categories %}
+            <div
+                    class="btn-group-vertical col-lg-6 col-lg-offset-0 col-md-6 col-md-offset-0 col-sm-10 col-sm-offset-1 col-xs-12">
+                <a lang="ru" href="{{ path('category_name', {slug: category.slug}) }}"
+                   class="btn btn-default">{{ category.name }}</a>
+            </div>
+        {% endfor %}
+    </nav>
 {% endblock %}

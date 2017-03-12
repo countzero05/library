@@ -3,29 +3,29 @@
 {% block description %}{{ 'Читать на мобильном книги автора ' ~ author.name ~ ' бесплатно' }}{% endblock %}
 
 {% block keywords %}
-  {{ [parent(), 'Авторы', author.name, 'Биография']|join(', ') }}
+    {{ [parent(), 'Авторы', author.name, 'Биография']|join(', ') }}
 {% endblock %}
 
 {% block title %}
-  {{ [author.name, 'Биография', 'Авторы', 'hudlit.info - Бесплатно читать книги онлайн без регистрации на мобильном']|join(' - ') }}
+    {{ [author.name, 'Биография', 'Авторы', libraryName ~ ' - Бесплатно читать книги онлайн без регистрации на мобильном']|join(' - ') }}
 {% endblock %}
 
   {% block breadcrumbs %}
-    {% include 'AppBundle:Template:breadcrumb.html.twig' with {links: {
-    'Библиотека': '/',
-    'Авторы': path('author'),
-    ('Авторы на ' ~ author.name|slice(0,1)|capitalize ) : path('author_letter', {letter: author.name|slice(0,1)|capitalize}),
-    (author.name): path('author_name', {slug: author.slug}),
+      {% include 'AppBundle:Template:breadcrumb.html.twig' with {links: {
+      'Библиотека': '/',
+      'Авторы': path('author'),
+      ('Авторы на ' ~ author.name|slice(0,1)|capitalize ) : path('author_letter', {letter: author.name|slice(0,1)|capitalize}),
+      (author.name): path('author_name', {slug: author.slug}),
       'Биография': ''
-    }} %}
+      }} %}
   {% endblock breadcrumbs %}
 
 {% block content %}
-  <h1>{{ author.name }}</h1>
-  <article class="biography">
-    {{ author.biography|raw }}
-  </article>
+    <h1>{{ author.name }}</h1>
+    <article class="biography">
+        {{ author.biography|raw }}
+    </article>
 
-  <div class="wikipedia-link">Материал из Википедии — свободной энциклопедии</div>
+    <div class="wikipedia-link">Материал из Википедии — свободной энциклопедии</div>
 
 {% endblock %}

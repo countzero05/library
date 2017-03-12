@@ -1,7 +1,9 @@
 {
   "directory": "src/AppBundle/Resources/public/bower_components",
-  "json": "bower.json",
-  "endpoint": "http://bower.io/search/",
-  "searchpath": "",
-  "shorthand_resolver": ""
+  "timeout": 120000,
+  "save": true,
+  "save-exact": true,
+  "registry": {
+  },
+  "json": "bower.json"
 }

@@ -2,6 +2,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Index;
 
@@ -9,11 +10,13 @@ use Doctrine\ORM\Mapping\Index;
  * AppBundle\Entity\Category
  *
  * @ORM\Table(name="categories",indexes={@Index(name="search_category_name", columns={"name"}),@Index(name="search_category_slug", columns={"slug"})})
- * @ORM\Entity(repositoryClass="AppBundle\Entity\CategoryRepository")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\CategoryRepository")
  * @ORM\HasLifecycleCallbacks()
  */
 class Category
 {
+
+    use CUTrait;
 
     /**
      * @var integer $id
@@ -47,7 +50,7 @@ class Category
     private $parent;
 
     /**
-     * @var ArrayCollection
+     * @var Collection
      *
      * @ORM\OneToMany(targetEntity="Category", mappedBy="parent")
      * @ORM\OrderBy({"name" = "ASC"})
@@ -55,23 +58,11 @@ class Category
     private $categories;
 
     /**
+     * @var Collection
+     *
      * @ORM\ManyToMany(targetEntity="Book", mappedBy="books_categories", cascade={"persist", "remove"})
      **/
     private $books;
-
-    /**
-     * @var \DateTime $created
-     *
-     * @ORM\Column(name="created", type="datetime", nullable=false)
-     */
-    private $created;
-
-    /**
-     * @var \DateTime $updated
-     *
-     * @ORM\Column(name="updated", type="datetime", nullable=false)
-     */
-    private $updated;
 
     public function __construct()
     {
@@ -82,7 +73,7 @@ class Category
     /**
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
@@ -90,147 +81,109 @@ class Category
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
     /**
      * @param string $name
-     * @return Book
+     * @return $this
      */
-    public function setName($name)
+    public function setName(string $name)
     {
         $this->name = $name;
         return $this;
     }
 
     /**
-     * @return \DateTime
-     */
-    public function getCreated()
-    {
-        return $this->created;
-    }
-
-    /**
-     * @ORM\PrePersist()
-     * @return Book
-     */
-    public function setCreated()
-    {
-        $this->created = $this->updated = new \DateTime();
-        return $this;
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function getUpdated()
-    {
-        return $this->updated;
-    }
-
-    /**
-     * @ORM\PreUpdate()
-     * @return Book
-     */
-    public function setUpdated()
-    {
-        $this->updated = new \DateTime();
-        return $this;
-    }
-
-    /**
-     * @return Category
-     */
-    public function getParent()
-    {
-        return $this->parent;
-    }
-
-    /**
-     * @param Category $parent
-     * @return Category
-     */
-    public function setParent($parent)
-    {
-        $this->parent = $parent;
-        return $this;
-    }
-
-    /**
-     * @return ArrayCollection
-     */
-    public function getCategories()
-    {
-        return $this->categories;
-    }
-
-    /**
-     * @param ArrayCollection $categories
-     * @return Category
-     */
-    public function setCategories($categories)
-    {
-        $this->categories = $categories;
-        return $this;
-    }
-
-    /**
      * @return string
      */
-    public function getSlug()
+    public function getSlug(): string
     {
         return $this->slug;
     }
 
     /**
      * @param string $slug
-     * @return Category
+     * @return $this
      */
-    public function setSlug($slug)
+    public function setSlug(string $slug)
     {
         $this->slug = $slug;
         return $this;
     }
 
     /**
-     * @return ArrayCollection
+     * @return Category|null
      */
-    public function getBooks()
+    public function getParent(): ?Category
+    {
+        return $this->parent;
+    }
+
+    /**
+     * @param Category|null $parent
+     * @return $this
+     */
+    public function setParent(Category $parent = null)
+    {
+        $this->parent = $parent;
+        return $this;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getCategories(): Collection
+    {
+        return $this->categories;
+    }
+
+    /**
+     * @param Collection $categories
+     * @return $this
+     */
+    public function setCategories(Collection $categories)
+    {
+        $this->categories = $categories;
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getBooks(): Collection
     {
         return $this->books;
     }
 
     /**
-     * @param ArrayCollection $books
-     * @return Category
+     * @param mixed $books
+     * @return $this
      */
-    public function setBooks($books)
+    public function setBooks(Collection $books)
     {
         $this->books = $books;
         return $this;
     }
 
+    /**
+     * @param Book $book
+     * @return $this
+     */
     public function addBook(Book $book)
     {
-        if (!$this->books->contains($book))
+        if (!$this->books->contains($book)) {
             $this->books->add($book);
+        }
+
+        return $this;
     }
 
     public function __toString()
     {
-        return $this->name;
+        return $this->slug;
     }
 
-    /**
-     * @return Author[]
-     */
-    public function getAuthors()
-    {
-        return array_unique($this->getBooks()->map(function (Book $book) {
-            return $book->getAuthor();
-        })->toArray());
-    }
 }

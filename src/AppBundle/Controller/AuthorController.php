@@ -1,19 +1,12 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: admin
- * Date: 1/10/15
- * Time: 8:12 PM
- */
 
 namespace AppBundle\Controller;
 
-
 use AppBundle\Entity\Author;
-use Doctrine\ORM\Query;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -23,11 +16,11 @@ use Symfony\Component\Routing\Annotation\Route;
  * @Cache(expires="+1 minute", public="true", smaxage="60")
  * @Route("/author")
  */
-class AuthorController extends DefaultController
+class AuthorController extends Controller
 {
     /**
      * @Route("/", name="author", defaults={"letter"="А"})
-     * @Route("/letter/{letter}", name="author_letter", defaults={"letter"="А"})
+     * @Route("/letter/{letter}", name="author_letter")
      * @Template()
      * @param Request $request
      * @param $letter
@@ -35,25 +28,8 @@ class AuthorController extends DefaultController
      */
     public function authorAction(Request $request, $letter)
     {
-        $authors = $this->getAuthorRepository()
-            ->createQueryBuilder('a')
-            ->orderBy('a.name', 'ASC')
-            ->where('a.name like :letter')
-            ->setMaxResults(60)
-            ->setFirstResult(60 * ($request->query->getInt('page', 1) - 1))
-            ->getQuery()
-            ->setParameters(['letter' => $letter . '%'])
-            ->useResultCache(true, 3600)
-            ->getResult();
 
-        $authorsCount = $this->getAuthorRepository()
-            ->createQueryBuilder('a')
-            ->select('count(a)')
-            ->where('a.name like :letter')
-            ->getQuery()
-            ->setParameters(['letter' => $letter . '%'])
-            ->useResultCache(true, 3600)
-            ->getSingleScalarResult();
+        list ($authors, $count) = $this->getDoctrine()->getRepository('AppBundle:Author')->getAuthorsByLetterAndPage($letter, $request->query->getInt('page', 1));
 
         $allLetters = array();
         foreach (range(chr(0xC0), chr(0xDF)) as $v) {
@@ -66,7 +42,7 @@ class AuthorController extends DefaultController
         return [
             'authors' => $authors,
             'allLetters' => $allLetters,
-            'authorsCount' => $authorsCount
+            'authorsCount' => $count
         ];
     }
 

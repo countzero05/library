@@ -1,7 +1,9 @@
 <?php
+
 namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Index;
 
@@ -9,11 +11,13 @@ use Doctrine\ORM\Mapping\Index;
  * AppBundle\Entity\Book
  *
  * @ORM\Table(name="books",indexes={@Index(name="search_book_name", columns={"name", "author_id"}), @Index(name="search_book_slug", columns={"slug", "author_id"})})
- * @ORM\Entity(repositoryClass="AppBundle\Entity\BookRepository")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\BookRepository")
  * @ORM\HasLifecycleCallbacks()
  */
 class Book
 {
+
+    use CUTrait;
 
     /**
      * @var integer $id
@@ -61,9 +65,9 @@ class Book
 
 
     /**
-     * @var ArrayCollection
+     * @var Collection
      *
-     * @ORM\OneToMany(targetEntity="BookPage", mappedBy="book")
+     * @ORM\OneToMany(targetEntity="BookPage", mappedBy="book", cascade={"persist"})
      * @ORM\OrderBy({"page" = "ASC"})
      */
     private $books_pages;
@@ -75,20 +79,6 @@ class Book
      */
     private $page_count;
 
-    /**
-     * @var \DateTime $created
-     *
-     * @ORM\Column(name="created", type="datetime", nullable=false)
-     */
-    private $created;
-
-    /**
-     * @var \DateTime $updated
-     *
-     * @ORM\Column(name="updated", type="datetime", nullable=false)
-     */
-    private $updated;
-
     public function __construct()
     {
         $this->books_categories = new ArrayCollection();
@@ -98,78 +88,60 @@ class Book
     /**
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
     /**
+     * @return Author
+     */
+    public function getAuthor(): Author
+    {
+        return $this->author;
+    }
+
+    /**
+     * @param Author $author
+     * @return $this
+     */
+    public function setAuthor(Author $author)
+    {
+        $this->author = $author;
+        return $this;
+    }
+
+    /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
     /**
      * @param string $name
-     * @return Book
+     * @return $this
      */
-    public function setName($name)
+    public function setName(string $name)
     {
         $this->name = $name;
         return $this;
     }
 
     /**
-     * @return \DateTime
-     */
-    public function getCreated()
-    {
-        return $this->created;
-    }
-
-    /**
-     * @ORM\PrePersist()
-     * @return Book
-     */
-    public function setCreated()
-    {
-        $this->created = $this->updated = new \DateTime();
-        return $this;
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function getUpdated()
-    {
-        return $this->updated;
-    }
-
-    /**
-     * @ORM\PreUpdate()
-     * @return Book
-     */
-    public function setUpdated()
-    {
-        $this->updated = new \DateTime();
-        return $this;
-    }
-
-    /**
      * @return string
      */
-    public function getFilename()
+    public function getFilename(): string
     {
         return $this->filename;
     }
 
     /**
      * @param string $filename
-     * @return Book
+     * @return $this
      */
-    public function setFilename($filename)
+    public function setFilename(string $filename)
     {
         $this->filename = $filename;
         return $this;
@@ -178,47 +150,23 @@ class Book
     /**
      * @return string
      */
-    public function getSlug()
+    public function getSlug(): string
     {
         return $this->slug;
     }
 
     /**
      * @param string $slug
-     * @return Book
+     * @return $this
      */
-    public function setSlug($slug)
+    public function setSlug(string $slug)
     {
         $this->slug = $slug;
         return $this;
     }
 
     /**
-     * @return Author
-     */
-    public function getAuthor()
-    {
-        return $this->author;
-    }
-
-    /**
-     * @param Author $author
-     * @return Book
-     */
-    public function setAuthor($author)
-    {
-        $this->author = $author;
-        return $this;
-    }
-
-    public function addCategory(Category $category)
-    {
-        if (!$this->books_categories->contains($category))
-            $this->books_categories->add($category);
-    }
-
-    /**
-     * @return ArrayCollection
+     * @return mixed
      */
     public function getBooksCategories()
     {
@@ -227,7 +175,7 @@ class Book
 
     /**
      * @param mixed $books_categories
-     * @return Book
+     * @return $this
      */
     public function setBooksCategories($books_categories)
     {
@@ -236,18 +184,18 @@ class Book
     }
 
     /**
-     * @return ArrayCollection
+     * @return Collection
      */
-    public function getBooksPages()
+    public function getBooksPages(): Collection
     {
         return $this->books_pages;
     }
 
     /**
-     * @param ArrayCollection $books_pages
-     * @return Book
+     * @param Collection $books_pages
+     * @return $this
      */
-    public function setBooksPages($books_pages)
+    public function setBooksPages(Collection $books_pages)
     {
         $this->books_pages = $books_pages;
         return $this;
@@ -256,18 +204,33 @@ class Book
     /**
      * @return int
      */
-    public function getPageCount()
+    public function getPageCount(): int
     {
-        return $this->page_count;
+        return (int)$this->page_count;
     }
 
     /**
-     * @param int $page_count
-     * @return Book
+     * @ORM\PrePersist()
+     * @ORM\PreUpdate()
+     *
+     * @return $this
      */
-    public function setPageCount($page_count)
+    public function setPageCount()
     {
-        $this->page_count = $page_count;
+        $this->page_count = count($this->books_pages);
+        return $this;
+    }
+
+    /**
+     * @param Category $category
+     * @return $this
+     */
+    public function addCategory(Category $category)
+    {
+        if (!$this->books_categories->contains($category)) {
+            $this->books_categories->add($category);
+        }
+
         return $this;
     }
 

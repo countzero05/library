@@ -3,6 +3,7 @@
 namespace AppBundle\Command;
 
 use Doctrine\Bundle\DoctrineBundle\Registry;
+use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\DBAL\Driver\PDOConnection;
 use Doctrine\DBAL\Driver\PDOStatement;
 use Doctrine\ORM\EntityManager;
@@ -22,7 +23,7 @@ class BiographyCommand extends ContainerAwareCommand
     }
 
     /**
-     * @return EntityManager
+     * @return ObjectManager
      */
     protected function getManager()
     {
@@ -32,12 +33,13 @@ class BiographyCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('biography:parse')
+            ->setName('library:biography')
             ->setDescription('Parse authors biographies');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        /** @var EntityManager $em */
         $em = $this->getManager();
 
         /** @var PDOConnection $con */
@@ -84,38 +86,19 @@ class BiographyCommand extends ContainerAwareCommand
 
                 $xpath = new \DOMXPath($doc);
 
-                $checks = $xpath->query('//a[@id="mw-mf-last-modified"]');
+                /** @var \DOMNodeList $checks */
+                $checks = $xpath->query('//div[@id="mf-section-0"]');
 
                 if ($checks->length) {
-                    $contents = $xpath->query('//div[@id="content"]/div[position()=2]/p|//div[@id="content"]/div[position()=2]/h3/span|//div[@id="content"]/div[position()=2]/blockquote|//div[@id="content"]/div[position()=2]/ul');
+                    $contents = $xpath->evaluate('string(p[position()=1])', $checks->item(0));
 
-                    $s = '';
-                    for ($i = 0; $i < $contents->length; $i++) {
-                        $text = trim($contents->item($i)->textContent);
-                        switch ($contents->item($i)->nodeName) {
-                            case 'p':
-                                $s .= '<p>' . $text . '</p>' . "\n";
-                                break;
-                            case 'span':
-                                $s .= '<div class="bio-heading">' . $text . '</div>' . "\n";
-                                break;
-                            case 'ul':
-                                $s .= '<div class="bio-list">' . $text . '</div>' . "\n";
-                                break;
-                            case 'blockquote':
-                                $s .= '<div class="bio-blockquote">' . $text . '</div>' . "\n";
-                                break;
-                            default:
-                                $s .= '<p>' . $text . '</p>' . "\n";
-                                break;
-                        }
-                    }
-
-                    $s = preg_replace('/\[\d+\]/', '', $s);
-
-                    if (mb_strlen($s, 'utf-8') > 500) {
-                        $oAuthor->setBiography($s);
+                    $contents = preg_replace('/\[\d+\]/', '', $contents);
+                    if (mb_strlen($contents, 'utf-8') > 100) {
+                        $oAuthor->setBiography($contents);
                         $output->writeln('set author biography');
+                    } else {
+                        $oAuthor->setBiography('');
+                        $oAuthor->setBiographyUpdated(new \DateTime());
                     }
                 }
             }
@@ -127,26 +110,3 @@ class BiographyCommand extends ContainerAwareCommand
 
     }
 }
-
-/*else {
-                continue;
-                $results = $xpath->query('//ul[@class="mw-search-results"]');
-
-                if ($results->length < 1) {
-                    continue;
-                }
-
-                $el = $results[0];
-
-                $as = $xpath->query('li/div/a', $el);
-
-                if (!$as->length) {
-                    continue;
-                }
-
-                $a = $as->item(0);
-
-                var_dump($a->getAttribute('href'));
-
-                die();
-            }*/

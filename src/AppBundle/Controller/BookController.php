@@ -1,20 +1,14 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: admin
- * Date: 1/10/15
- * Time: 8:12 PM
- */
 
 namespace AppBundle\Controller;
 
 
 use AppBundle\Entity\Book;
 use AppBundle\Entity\BookPage;
-use Doctrine\ORM\EntityManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Cache;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -26,67 +20,25 @@ use Symfony\Component\Routing\Annotation\Route;
  * @Cache(expires="+1 minute", public="true", smaxage="60")
  * @Route("/book")
  */
-class BookController extends DefaultController
+class BookController extends Controller
 {
     /**
      * @Route("/{slug}", name="book", defaults={"page" = 1})
      * @Route("/{slug}/page/{page}", name="book_page", defaults={"page" = 1}, requirements={"page": "\d+"})
      * @Template()
      * @param Request $request
-     * @param $slug
+     * @param Book $book
      * @param $page
      * @return array|RedirectResponse
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     * @throws \Exception
+     * @ParamConverter("book", options={"mapping": {"slug": "slug"}})
      */
-    public function bookAction(Request $request, $slug, $page)
+    public function bookAction(Request $request, Book $book, int $page = 1)
     {
-        if (preg_match('/\-$/', $slug)) {
-            $slug = mb_substr($slug, 0, mb_strlen($slug, 'utf-8') - 1, 'utf-8');
-
-            if ($request->attributes->get('_route') === 'book') {
-                $url = $this->generateUrl('book', ['slug' => $slug]);
-            } else {
-                $url = $this->generateUrl('book_page', ['slug' => $slug, 'page' => $page]);
-            }
-            return new RedirectResponse($url, 301);
-        }
-
         $request->attributes->set('_route', 'book_page');
 
-        /** @var Book $book */
-        $book = $this->getBookRepository()
-            ->createQueryBuilder('b')
-            ->where('b.slug = :slug')
-            ->setParameters(['slug' => $slug])
-            ->getQuery()
-            //->useResultCache(true, 3600)
-            ->getOneOrNullResult();
-
-        if ($book->getPageCount() === null) {
-            $filePath = $this->get('service_container')->getParameter('kernel.root_dir') . '/Resources/_Utf8/' . $book->getFilename();
-
-            $em = $this->get('doctrine.orm.entity_manager');
-
-            $em->transactional(function (EntityManager $em) use ($filePath, $book) {
-                $page = 0;
-
-                foreach ($this->readData($filePath) as $arr) {
-                    $bookPage = new BookPage();
-
-                    $bookPage->setBook($book);
-                    $bookPage->setContent(implode('', $arr));
-                    $bookPage->setPage(++$page);
-
-                    $em->persist($bookPage);
-                }
-
-                $book->setPageCount($page);
-
-                $em->persist($book);
-            });
-
-            $em->refresh($book);
+        if (!$book->getPageCount()) {
+            $this->getDoctrine()->getRepository('AppBundle:Book')
+                ->parseBook($book, $this->getParameter('library_directory'));
         }
 
         if ($page < 1 || $page > $book->getPageCount()) {
@@ -94,7 +46,7 @@ class BookController extends DefaultController
         }
 
         /** @var BookPage $bookPage */
-        $bookPage = $this->getBookPageRepository()->findOneBy([
+        $bookPage = $this->getDoctrine()->getRepository('AppBundle:BookPage')->findOneBy([
             'book' => $book->getId(),
             'page' => $page
         ]);
@@ -103,35 +55,6 @@ class BookController extends DefaultController
             'book' => $book,
             'bookPage' => $bookPage
         ];
-    }
-
-    /**
-     * @param $filePath
-     * @return \Generator
-     */
-    protected function readData($filePath)
-    {
-        $h = fopen($filePath, 'r');
-
-        $arr = [];
-        $i = 0;
-
-        if ($h !== FALSE) {
-            while (($s = fgets($h)) !== FALSE) {
-                $arr[] = $s;
-                if (++$i === 40) {
-                    yield $arr;
-                    $arr = [];
-                    $i = 0;
-                }
-            }
-
-            yield $arr;
-
-            fclose($h);
-        } else {
-            throw new FileException('Cannot read file ' . $filePath);
-        }
     }
 
 }

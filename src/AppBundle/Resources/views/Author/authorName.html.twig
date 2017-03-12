@@ -3,43 +3,46 @@
 {% block description %}{{ 'Читать на мобильном книги автора ' ~ author.name ~ ' бесплатно' }}{% endblock %}
 
 {% block keywords %}
-  {{ [parent(), 'Авторы', author.name]|join(', ') }}
+    {{ [parent(), 'Авторы', author.name]|join(', ') }}
 {% endblock %}
 
 {% block title %}
-  {{ [author.name, 'hudlit.info - Бесплатно читать книги онлайн без регистрации на мобильном']|join(' - ') }}
+    {{ [author.name, libraryName ~ ' - Бесплатно читать книги онлайн без регистрации на мобильном']|join(' - ') }}
 {% endblock %}
 
   {% block breadcrumbs %}
-    {% include 'AppBundle:Template:breadcrumb.html.twig' with {links: {
-    'Библиотека': '/',
-    'Авторы': path('author'),
-    ('Авторы на ' ~ author.name|slice(0,1)|capitalize ) : path('author_letter', {letter: author.name|slice(0,1)|capitalize}),
-    (author.name):''
-    }} %}
+      {% include 'AppBundle:Template:breadcrumb.html.twig' with {links: {
+      'Библиотека': '/',
+      'Авторы': path('author'),
+      ('Авторы на ' ~ author.name|slice(0,1)|capitalize ) : path('author_letter', {letter: author.name|slice(0,1)|capitalize}),
+      (author.name):''
+      }} %}
   {% endblock breadcrumbs %}
 
 {% block content %}
-  <h1>{{ author.name }}</h1>
-  <div class="row">
-    {% if author.biography is not null %}
-      <div class="well well-sm col-lg-10 col-md-12 col-sm-12 col-xs-12 col-lg-offset-1">
-        <h2>Биография</h2>
-        <article class="biography">
-          {{ author.biography|slice(0, 500)|raw }} ... <a class="biography-link"
-                                                          href="{{ path('author_biography', { slug: author.slug }) }}">читать
-            биографию полностью</a>
-        </article>
-      </div>
-    {% endif %}
-  </div>
-  <nav id="center-menu" class="row">
-    {% for book in author.books %}
-      <div class="btn-group-vertical col-lg-6 col-md-6 col-sm-6 col-xs-12">
-        <a lang="ru" class="btn btn-default" href="{{ path('book', {slug: book.slug}) }}"
-            >{{ book.name }}</a>
-      </div>
-    {% endfor %}
-  </nav>
+    <h1>{{ author.name }}</h1>
+    <div class="row">
+        {% if author.biography is not null %}
+            <div class="col-lg-10 col-md-12 col-sm-12 col-xs-12 col-lg-offset-1">
+                {#<h2>Биография</h2>#}
+                <article class="biography">
+                    {{ author.biography }}
+{#
+                    {{ author.biography|slice(0, 500)|raw }} ... <a class="biography-link"
+                                                                    href="{{ path('author_biography', { slug: author.slug }) }}">читать
+                        биографию полностью</a>
+#}
+                </article>
+            </div>
+        {% endif %}
+    </div>
+    <nav id="center-menu" class="row">
+        {% for book in author.books %}
+            <div class="btn-group-vertical col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                <a lang="ru" class="btn btn-default" href="{{ path('book', {slug: book.slug}) }}"
+                >{{ book.name }}</a>
+            </div>
+        {% endfor %}
+    </nav>
 
 {% endblock %}

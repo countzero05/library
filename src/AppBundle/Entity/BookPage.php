@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: admin
- * Date: 2/15/15
- * Time: 1:30 PM
- */
 
 namespace AppBundle\Entity;
 
@@ -15,11 +9,13 @@ use Doctrine\ORM\Mapping\Index;
  * AppBundle\Entity\Book
  *
  * @ORM\Table(name="books_pages",indexes={@Index(name="search_book_page", columns={"book_id", "page"})})
- * @ORM\Entity(repositoryClass="AppBundle\Entity\BookPageRepository")
+ * @ORM\Entity(repositoryClass="AppBundle\Repository\BookPageRepository")
  * @ORM\HasLifecycleCallbacks()
  */
 class BookPage
 {
+
+    use CUTrait;
 
     /**
      * @var integer $id
@@ -53,23 +49,9 @@ class BookPage
     private $content;
 
     /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="created", type="datetime", nullable=false)
-     */
-    private $created;
-
-    /**
-     * @var \DateTime
-     *
-     * @ORM\Column(name="updated", type="datetime", nullable=false)
-     */
-    private $updated;
-
-    /**
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
@@ -77,16 +59,16 @@ class BookPage
     /**
      * @return Book
      */
-    public function getBook()
+    public function getBook(): Book
     {
         return $this->book;
     }
 
     /**
      * @param Book $book
-     * @return BookPage
+     * @return $this
      */
-    public function setBook($book)
+    public function setBook(Book $book)
     {
         $this->book = $book;
         return $this;
@@ -95,16 +77,16 @@ class BookPage
     /**
      * @return int
      */
-    public function getPage()
+    public function getPage(): int
     {
         return $this->page;
     }
 
     /**
      * @param int $page
-     * @return BookPage
+     * @return $this
      */
-    public function setPage($page)
+    public function setPage(int $page)
     {
         $this->page = $page;
         return $this;
@@ -113,56 +95,20 @@ class BookPage
     /**
      * @return string
      */
-    public function getContent()
+    public function getContent(): string
     {
         return $this->content;
     }
 
     /**
      * @param string $content
-     * @return BookPage
+     * @return $this
      */
-    public function setContent($content)
+    public function setContent(string $content)
     {
         $this->content = $content;
         return $this;
     }
 
-
-    /**
-     * @return \DateTime
-     */
-    public function getCreated()
-    {
-        return $this->created;
-    }
-
-    /**
-     * @ORM\PrePersist()
-     * @return Book
-     */
-    public function setCreated()
-    {
-        $this->created = $this->updated = new \DateTime();
-        return $this;
-    }
-
-    /**
-     * @return \DateTime
-     */
-    public function getUpdated()
-    {
-        return $this->updated;
-    }
-
-    /**
-     * @ORM\PreUpdate()
-     * @return Book
-     */
-    public function setUpdated()
-    {
-        $this->updated = new \DateTime();
-        return $this;
-    }
 
 }

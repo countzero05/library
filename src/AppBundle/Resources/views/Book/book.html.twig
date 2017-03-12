@@ -3,48 +3,48 @@
 {% block description %}{{ ('Предлагаем Вам бесплатно прочесть книгу ' ~ book.name ~ ', которую написал ' ~ book.author.name ~ '. Книгу ' ~ book.name ~ ' также удобно читать и на мобильном') }}{% endblock %}
 
 {% block keywords %}
-  {{ [parent(), book.author.name, book.name, book.booksCategories.first.name]|join(', ') }}
+    {{ [parent(), book.author.name, book.name, book.booksCategories.first.name]|join(', ') }}
 {% endblock %}
 
 {% block title %}
-  {{ [book.name, book.author.name, 'hudlit.info - Бесплатно читать книги онлайн без регистрации на мобильном', ('Страница ' ~ app.request.attributes.getInt('page', 1))]|join(' - ') }}
+    {{ [book.name, book.author.name, libraryName ~ ' - Бесплатно читать книги онлайн без регистрации на мобильном', ('Страница ' ~ app.request.attributes.getInt('page', 1))]|join(' - ') }}
 {% endblock %}
 
 {% block container_class %}
-  .container-text
+    .container-text
 {% endblock %}
 
   {% block breadcrumbs %}
-    {% include 'AppBundle:Template:breadcrumb.html.twig' with {links: {
-    'Библиотека': '/',
-    'Авторы': path('author'),
-    ('Авторы на ' ~ book.author.name|slice(0,1)|capitalize ) : path('author_letter', {letter: book.author.name|slice(0,1)|capitalize}),
-    (book.author.name):path('author_name', {slug: book.author.slug}),
-    (book.name): ''
-    }} %}
+      {% include 'AppBundle:Template:breadcrumb.html.twig' with {links: {
+      'Библиотека': '/',
+      'Авторы': path('author'),
+      ('Авторы на ' ~ book.author.name|slice(0,1)|capitalize ) : path('author_letter', {letter: book.author.name|slice(0,1)|capitalize}),
+      (book.author.name):path('author_name', {slug: book.author.slug}),
+      (book.name): ''
+      }} %}
   {% endblock breadcrumbs %}
 
 {% block content %}
-  <div itemscope itemtype="http://schema.org/Article">
-    <h6>Автор: <a lang="ru" href="{{ path('author_name', {slug: book.author.slug}) }}">{{ book.author.name }}</a>
-    </h6>
-    <h6>Категория: <a
-          href="{{ path('category_name', {slug: book.booksCategories.first.slug}) }}">{{ book.booksCategories.first.name }}</a>
-    </h6>
+    <div itemscope itemtype="http://schema.org/Article">
+        <h6>Автор: <a lang="ru" href="{{ path('author_name', {slug: book.author.slug}) }}">{{ book.author.name }}</a>
+        </h6>
+        <h6>Категория: <a
+                    href="{{ path('category_name', {slug: book.booksCategories.first.slug}) }}">{{ book.booksCategories.first.name }}</a>
+        </h6>
 
-    <h1 itemprop="name">{{ book.name }}</h1>
+        <h1 class="book-name" itemprop="name">{{ book.name }}</h1>
 
-    <h2 itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <span itemprop="name">{{ book.author.name }}</span>
-    </h2>
-  </div>
-  <nav id="center-menu" class="row">
-    <div id="book-content"
-         class="btn-group-vertical col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2 col-sm-12 col-xs-12">
-      {{ pagination(app.request.attributes.getInt('page', 1), book.pageCount, 1, 3, {slug: app.request.attributes.get('slug')})|raw }}
-      <pre>{{ bookPage.content }}</pre>
-      {{ pagination(app.request.attributes.getInt('page', 1), book.pageCount, 1, 3, {slug: app.request.attributes.get('slug')})|raw }}
+        <h2 itemprop="author" itemscope itemtype="http://schema.org/Person">
+            <span itemprop="name">{{ book.author.name }}</span>
+        </h2>
     </div>
-  </nav>
+    <nav id="center-menu" class="row">
+        <div id="book-content"
+             class="btn-group-vertical col-lg-6 col-lg-offset-3 col-md-8 col-md-offset-2 col-sm-12 col-xs-12">
+            {{ pagination(app.request.attributes.getInt('page', 1), book.pageCount, 1, 3, {slug: app.request.attributes.get('slug')})|raw }}
+            <pre>{{ bookPage.content }}</pre>
+            {{ pagination(app.request.attributes.getInt('page', 1), book.pageCount, 1, 3, {slug: app.request.attributes.get('slug')})|raw }}
+        </div>
+    </nav>
 
 {% endblock %}

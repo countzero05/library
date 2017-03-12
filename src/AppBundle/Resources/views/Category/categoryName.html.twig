@@ -3,58 +3,58 @@
 {% block description %}{{ 'Читать на мобильном книги в категории ' ~ category.name ~ ' бесплатно. Художественная литература на любой вкус' }}{% endblock %}
 
 {% block keywords %}
-  {% if category.parent %}
-    {{ [category.parent.name, category.name, parent()]|join(', ') }}
-  {% else %}
-    {{ [category.name, parent()]|join(', ') }}
-  {% endif %}
+    {% if category.parent %}
+        {{ [category.parent.name, category.name, parent()]|join(', ') }}
+    {% else %}
+        {{ [category.name, parent()]|join(', ') }}
+    {% endif %}
 {% endblock %}
 
 {% block title %}
-  {% if category.parent %}
-    {{ [category.name, category.parent.name, 'Категории', 'hudlit.info - Бесплатно читать книги онлайн без регистрации на мобильном']|join(' - ') }}
-  {% else %}
-    {{ [category.name, 'Категории', 'hudlit.info - Бесплатно читать книги онлайн без регистрации на мобильном']|join(' - ') }}
-  {% endif %}
+    {% if category.parent %}
+        {{ [category.name, category.parent.name, 'Категории', 'hudlit.info - Бесплатно читать книги онлайн без регистрации на мобильном']|join(' - ') }}
+    {% else %}
+        {{ [category.name, 'Категории', libraryName ~ ' - Бесплатно читать книги онлайн без регистрации на мобильном']|join(' - ') }}
+    {% endif %}
 {% endblock %}
 
   {% block breadcrumbs %}
-    {% if category.parent %}
-      {% include 'AppBundle:Template:breadcrumb.html.twig' with {links: {
-      'Библиотека': '/',
-      'Категории' : path('category'),
-      (category.parent.name): path('category_name', {slug: category.parent.slug}),
-      (category.name): ''
-      }} %}
-    {% else %}
-      {% include 'AppBundle:Template:breadcrumb.html.twig' with {links: {
-      'Библиотека': '/',
-      'Категории' : path('category'),
-      (category.name): ''
-      }} %}
-    {% endif %}
+      {% if category.parent %}
+          {% include 'AppBundle:Template:breadcrumb.html.twig' with {links: {
+          'Библиотека': '/',
+          'Категории' : path('category'),
+          (category.parent.name): path('category_name', {slug: category.parent.slug}),
+          (category.name): ''
+          }} %}
+      {% else %}
+          {% include 'AppBundle:Template:breadcrumb.html.twig' with {links: {
+          'Библиотека': '/',
+          'Категории' : path('category'),
+          (category.name): ''
+          }} %}
+      {% endif %}
   {% endblock breadcrumbs %}
 
 {% block content %}
-  <nav id="center-menu" class="row">
-    {% if category.categories.count > 0 %}
-      {% for sub_category in category.categories %}
-        <div
-            class="btn-group-vertical col-lg-6 col-lg-offset-0 col-md-6 col-md-offset-0 col-sm-10 col-sm-offset-1 col-xs-12">
-          <a lang="ru" href="{{ path('category_name', {slug: sub_category.slug}) }}"
-             class="btn btn-default">{{ sub_category.name }}</a>
-        </div>
-      {% endfor %}
-    {% else %}
-      {{ pagination(app.request.query.getInt('page', 1), authorsCount, 60, 7, {slug: app.request.attributes.get('slug')})|raw }}
-      {% for author in authors %}
-        <div class="btn-group-vertical col-lg-4 col-md-6 col-sm-6 col-xs-12">
-          <a lang="ru" href="{{ path('author_name', {slug: author.slug}) }}"
-             class="btn btn-default">{{ author.name }}</a>
-        </div>
-      {% endfor %}
-      <div class="clearfix"></div>
-      {{ pagination(app.request.query.getInt('page', 1), authorsCount, 60, 7, {slug: app.request.attributes.get('slug')})|raw }}
-    {% endif %}
-  </nav>
+    <nav id="center-menu" class="row">
+        {% if category.categories.count > 0 %}
+            {% for sub_category in category.categories %}
+                <div
+                        class="btn-group-vertical col-lg-6 col-lg-offset-0 col-md-6 col-md-offset-0 col-sm-10 col-sm-offset-1 col-xs-12">
+                    <a lang="ru" href="{{ path('category_name', {slug: sub_category.slug}) }}"
+                       class="btn btn-default">{{ sub_category.name }}</a>
+                </div>
+            {% endfor %}
+        {% else %}
+            {{ pagination(app.request.query.getInt('page', 1), authorsCount, 60, 7, {slug: app.request.attributes.get('slug')})|raw }}
+            {% for author in authors %}
+                <div class="btn-group-vertical col-lg-4 col-md-6 col-sm-6 col-xs-12">
+                    <a lang="ru" href="{{ path('author_name', {slug: author.slug}) }}"
+                       class="btn btn-default">{{ author.name }}</a>
+                </div>
+            {% endfor %}
+            <div class="clearfix"></div>
+            {{ pagination(app.request.query.getInt('page', 1), authorsCount, 60, 7, {slug: app.request.attributes.get('slug')})|raw }}
+        {% endif %}
+    </nav>
 {% endblock %}

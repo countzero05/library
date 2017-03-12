@@ -1,39 +1,32 @@
 <?php
+
 namespace AppBundle\Twig\Extension;
+
+use Doctrine\Bundle\DoctrineBundle\Registry;
+use Doctrine\ORM\EntityRepository;
 
 class Menu extends \Twig_Extension
 {
     /**
-     * @var \Twig_Environment $environment
+     * @var EntityRepository
      */
-    protected $environment;
+    private $repo;
 
-    protected $container;
-
-    public function __construct($container)
+    public function __construct(Registry $doctrine)
     {
-        $this->container = $container;
-    }
-
-    public function initRuntime(\Twig_Environment $environment)
-    {
-        $this->environment = $environment;
+        $this->repo = $doctrine->getRepository('AppBundle:Category');
     }
 
     public function getFunctions()
     {
-        return array(
-            'menu' => new \Twig_Function_Method($this, 'menu'),
-        );
+        return [
+            new \Twig_SimpleFunction ('menu', [$this, 'menu']),
+        ];
     }
 
     public function menu()
     {
-        $categories = $this->container->get('doctrine')->getRepository('AppBundle:Category')->createQueryBuilder('c')->where('c.parent is null')->orderBy('c.name', 'ASC')->getQuery()->getResult();
-
-        return $this->container->get('templating')->render('AppBundle:Extensions:menu.html.twig', [
-            'categories' => $categories,
-        ]);
+        return $this->repo->getRootDirectories();
     }
 
     public function getName()

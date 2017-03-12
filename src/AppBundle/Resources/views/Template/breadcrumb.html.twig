@@ -1,9 +1,9 @@
 <ul class="breadcrumb">
-  {% for key, link in links %}
-    {% if link == links|last %}
-      <li class="active">{{ key }}</li>
-    {% else %}
-      <li><a lang="ru" href="{{ link }}">{{ key }}</a></li>
-    {% endif %}
-  {% endfor %}
+    {% for key, link in links %}
+        {% if link == links|last %}
+            <li class="active">{{ key }}</li>
+        {% else %}
+            <li><a lang="ru" href="{{ link }}">{{ key }}</a></li>
+        {% endif %}
+    {% endfor %}
 </ul>

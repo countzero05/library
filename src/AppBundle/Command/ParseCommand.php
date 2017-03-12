@@ -6,6 +6,7 @@ use AppBundle\Entity\Author;
 use AppBundle\Entity\Book;
 use AppBundle\Entity\Category;
 use Doctrine\Bundle\DoctrineBundle\Registry;
+use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\DBAL\Driver\PDOConnection;
 use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
@@ -13,7 +14,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ParserCommand extends ContainerAwareCommand
+class ParseCommand extends ContainerAwareCommand
 {
 
     /**
@@ -47,38 +48,40 @@ class ParserCommand extends ContainerAwareCommand
     }
 
     /**
-     * @return EntityManager
+     * @return ObjectManager
      */
     protected function getManager()
     {
         return $this->getDoctrine()->getManager();
     }
 
-    protected static $directories = [
+    /**
+     * @var string[]
+     */
+    protected static $excludes = [
 //        'Военная проза и мемуары',
 //        'Зарубежная проза',
 //        'Зарубежный детектив',
-//        'Любовная литература',
-//        'Приключения и история',
+        'Любовная литература',
+        'Приключения и история',
 //        'Русская проза',
 //        'Русский детектив',
-//        'Эротика и секс',
+        'Эротика и секс',
 //        'Детская литература',
-        'Зарубежная фантастика',
+//        'Зарубежная фантастика',
 //        'Классика',
 //        'Научно-популярная литература',
-//        'Разное',
-        'Русская фантастика',
-//        'Стихи и песни',
-//        'Юмор'
+        'Разное',
+//        'Русская фантастика',
+        'Стихи и песни',
+        'Юмор'
     ];
 
     protected function configure()
     {
         $this
-            ->setName('parser:run')
-            ->setDescription('Run parsing')
-            ->addOption('path', 'p', InputOption::VALUE_REQUIRED, 'path to folder with files to parse');
+            ->setName('library:parse')
+            ->setDescription('Parse library catalog');
     }
 
     protected function hasChildrenDirs($path)
@@ -91,10 +94,25 @@ class ParserCommand extends ContainerAwareCommand
         return false;
     }
 
-    protected function saveStructure($root, Category &$parentCategory = null, Author &$author = null)
+    private function shouldExclude($filename) {
+        $name = basename($filename);
+
+        foreach (self::$excludes as $exclude) {
+            if (mb_strpos(mb_strtolower($name), mb_strtolower($exclude)) !== false) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function saveStructure($root, Category &$parentCategory = null, Author &$author = null)
     {
         foreach (glob($root . '/*') as $filename) {
             if (is_dir($filename)) {
+                if ($this->shouldExclude($filename)) {
+                    continue;
+                }
                 if ($this->hasChildrenDirs($filename)) {
                     $category = new Category();
                     $category->setName(basename($filename));
@@ -143,30 +161,27 @@ class ParserCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $path = $input->getOption('path');
+        $libraryDir = $this->getContainer()->getParameter('library_directory');
 
-        if (!$path)
-            throw new \Exception('Path to folder with files is required');
-
-        if (!file_exists($path))
+        if (!file_exists($libraryDir))
             throw new \Exception('Path to folder with files does not exist');
 
-        $this->root_dir = $path;
+        $this->root_dir = $libraryDir;
 
         $this->manager = $this->getManager();
 
-        $this->manager->transactional(function () use ($path, $output) {
+        $this->manager->transactional(function () use ($libraryDir, $output) {
             $output->writeln('Parsing directory structure');
-            $this->saveStructure($path);
+            $this->saveStructure($libraryDir);
             $output->writeln('Saving categories and authors');
 
             /** @var PDOConnection $con */
             $con = $this->getDoctrine()->getConnection()->getWrappedConnection();
 
-            $aCmd = $con->prepare('insert into authors (id, name, slug, created, updated) values (nextval(\'authors_id_seq\'), :name, :slug, current_timestamp, current_timestamp)');
-            $cCmd = $con->prepare('insert into categories (id, parent_id, name, slug, created, updated) values (nextval(\'authors_id_seq\'), (select id from categories where slug = :parent_slug limit 1), :name, :slug, current_timestamp, current_timestamp)');
-            $bCmd = $con->prepare('insert into books (id, author_id, name, slug, filename, created, updated) values (nextval(\'authors_id_seq\'), (select id from authors where slug = :author_slug limit 1), :name, :slug, :filename, current_timestamp, current_timestamp)');
-            $assocCmd = $con->prepare('insert into books_categories (book_id, category_id) values ((select id from books where slug = :book_slug limit 1), (select id from categories where slug = :category_slug limit 1))');
+            $aCmd = $con->prepare('INSERT INTO authors (id, name, slug, created, updated) VALUES (nextval(\'authors_id_seq\'), :name, :slug, current_timestamp, current_timestamp)');
+            $cCmd = $con->prepare('INSERT INTO categories (id, parent_id, name, slug, created, updated) VALUES (nextval(\'authors_id_seq\'), (SELECT id FROM categories WHERE slug = :parent_slug LIMIT 1), :name, :slug, current_timestamp, current_timestamp)');
+            $bCmd = $con->prepare('INSERT INTO books (id, author_id, name, slug, filename, created, updated) VALUES (nextval(\'authors_id_seq\'), (SELECT id FROM authors WHERE slug = :author_slug LIMIT 1), :name, :slug, :filename, current_timestamp, current_timestamp)');
+            $assocCmd = $con->prepare('INSERT INTO books_categories (book_id, category_id) VALUES ((SELECT id FROM books WHERE slug = :book_slug LIMIT 1), (SELECT id FROM categories WHERE slug = :category_slug LIMIT 1))');
 
             foreach ($this->authors as $author) {
                 $aCmd->execute([
@@ -234,10 +249,11 @@ class ParserCommand extends ContainerAwareCommand
         $phrase = str_replace('`', '', $phrase);
         $phrase = preg_replace('/[^a-z\d]/', '-', $phrase);
 
-        while (strpos($phrase, '--') !== false)
+        while (strpos($phrase, '--') !== false) {
             $phrase = str_replace('--', '-', $phrase);
+        }
 
-        return $phrase;
+        return trim($phrase, " -\t\n\r\0\x0B");
     }
 
 }
